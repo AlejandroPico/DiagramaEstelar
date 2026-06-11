@@ -74,6 +74,7 @@
           Importar CSV local
           <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
         </label>
+        <button id="repoCatalogButton" class="action-button secondary" type="button" hidden disabled>Cargar catálogos del repositorio</button>
         <p id="dataStatus" class="status-line">Cargando muestra local…</p>
         <details class="schema-details">
           <summary>Catálogos y campos admitidos</summary>
@@ -105,6 +106,7 @@
   <script src="app.js" defer></script>
   <script src="data-importer.js" defer></script>
   <script src="catalog-loader.js" defer></script>
+  <script src="static-catalog-loader.js" defer></script>
   <script src="label-rendering.js" defer></script>
 </body>
 </html>
