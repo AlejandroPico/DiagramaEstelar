@@ -10,7 +10,9 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 
 - Renderizado principal en Canvas.
 - Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
-- Panel lateral tipo hamburguesa.
+- Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
+- Buscador desplegable hacia la izquierda.
+- Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
 - Zoom mínimo fijado al 100%.
@@ -30,12 +32,14 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── index.html
 ├── styles.css
 ├── catalog-layers.css
+├── floating-toolbar.css
 ├── app.js
 ├── data-importer.js
 ├── catalog-loader.js
 ├── static-catalog-loader.js
 ├── label-rendering.js
 ├── catalog-layer-filter.js
+├── floating-toolbar.js
 ├── tools/
 │   └── split-catalogs.py
 ├── data/
@@ -47,9 +51,19 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 └── README.md
 ```
 
+## Interfaz
+
+La interfaz principal ya no usa menú hamburguesa visible. Las herramientas viven en una barra flotante situada en la esquina superior derecha:
+
+- **Lupa**: despliega el campo de búsqueda hacia la izquierda.
+- **Luna/Sol**: alterna entre modo oscuro y claro. La app arranca en modo oscuro.
+- **Datos**: abre el panel de catálogos visibles, importación CSV, recarga de catálogos del repositorio y ayuda de campos admitidos.
+- **Capas**: abre los interruptores de estrellas cargadas, nube pedagógica, regiones, etiquetas, cuadrícula/ejes y animación.
+- **Zoom**: muestra el porcentaje actual. Al pulsarlo, restablece la vista al 100%.
+
 ## Importación de catálogos
 
-La aplicación acepta uno o varios CSV locales desde el panel lateral. El fichero no se sube a ningún servidor: se procesa en el navegador.
+La aplicación acepta uno o varios CSV locales desde el panel de datos. El fichero no se sube a ningún servidor: se procesa en el navegador.
 
 El cargador avanzado reconoce actualmente:
 
@@ -86,7 +100,7 @@ Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manife
 
 ## Filtros por catálogo
 
-Al cargar datos reales, aparece la sección **Catálogos visibles** en el panel lateral. Todos los catálogos aparecen activados por defecto. Cada interruptor permite ocultar o mostrar una fuente concreta sin recargar los CSV.
+Al cargar datos reales, aparece la sección **Catálogos visibles** dentro del panel de datos. Todos los catálogos aparecen activados por defecto. Cada interruptor permite ocultar o mostrar una fuente concreta sin recargar los CSV.
 
 Esta capa visual trabaja sobre las estrellas ya importadas, así que no elimina datos del navegador; solo cambia qué fuentes se dibujan y qué fuentes son seleccionables con el ratón.
 
