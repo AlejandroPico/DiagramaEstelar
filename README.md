@@ -10,17 +10,20 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 
 - Renderizado principal en Canvas.
 - Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
-- Arranque vacío: la página muestra el diagrama, los colores, las regiones y los controles sin cargar estrellas ni catálogos.
+- Arranque vacío: la página muestra solo fondo, bandas espectrales, cuadrícula, ejes y controles; no carga estrellas ni catálogos.
+- Regiones evolutivas, etiquetas de zonas, nube pedagógica y animación arrancan desactivadas.
+- Burbuja inicial apuntando al botón de datos cuando no hay catálogos cargados.
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
+- Panel de datos minimalista con importación CSV, carga de repositorio y catálogos visibles.
+- Ficha de estrella compacta, con métricas principales y campos CSV conservados durante la importación.
 - Pantalla de carga con detalle textual y barra de progreso para catálogos pesados.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
 - Zoom mínimo fijado al 100%.
 - Ejes flotantes siempre visibles.
 - Ejes adaptativos con marcas intermedias según el zoom.
-- Zonas clicables: secuencia principal, gigantes, supergigantes, enanas blancas y franja de inestabilidad.
 - Importación local avanzada de CSV.
 - Detección de catálogos estáticos troceados desde `data/catalogs/manifest.json` cuando existe.
 - Filtros visuales por catálogo cargado.
@@ -34,14 +37,19 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── catalog-layers.css
 ├── floating-toolbar.css
 ├── loading-progress.css
+├── data-panel-refine.css
+├── star-card-refine.css
 ├── app.js
 ├── startup-empty-mode.js
 ├── data-importer.js
 ├── catalog-loader.js
+├── catalog-loader-enhanced.js
 ├── static-catalog-loader.js
 ├── label-rendering.js
 ├── catalog-layer-filter.js
 ├── floating-toolbar.js
+├── empty-data-hint.js
+├── star-card-refine.js
 ├── tools/
 │   └── split-catalogs.py
 ├── data/
@@ -65,7 +73,7 @@ La interfaz principal ya no usa menú hamburguesa visible. Las herramientas vive
 
 ## Arranque vacío
 
-La aplicación no carga estrellas de muestra ni catálogos al abrir la página. El script `startup-empty-mode.js` intercepta la muestra local, limpia cualquier nube sintética inicial y oculta la pantalla de carga cuando el escenario está listo.
+La aplicación no carga estrellas de muestra ni catálogos al abrir la página. El script `startup-empty-mode.js` intercepta la muestra local, limpia cualquier nube sintética inicial, desactiva regiones/etiquetas y oculta la pantalla de carga cuando el escenario está listo.
 
 El objetivo es evitar bloqueos de arranque y dejar que el usuario decida cuándo cargar datos reales desde el panel **Datos**.
 
@@ -79,6 +87,8 @@ El cargador avanzado reconoce actualmente:
 - **HYG / ATHYG / HYG-like**: detecta `proper`, `spect`, `ci`, `lum`, `absmag`, `dist`, `hip`, `hd`, `gl`. Si no hay temperatura explícita, estima temperatura desde B−V (`ci`) o clase espectral. Si no hay `lum`, calcula luminosidad desde magnitud absoluta (`absmag`).
 - **CSV de clasificación estelar tipo Kaggle**: detecta `Temperature (K)`, `Luminosity(L/Lo)`, `Radius(R/Ro)`, `Star type`, `Star color`, `Spectral Class`.
 - **CSV HR genéricos / Gaia-like**: reconoce campos como `teff`, `temperature`, `temperature_k`, `effective_temperature`, `teff_gspphot`, `luminosity`, `lum`, `lum_flame`, `radius`, `st_rad`, `mass`, `st_mass`, `sy_dist`.
+
+`catalog-loader-enhanced.js` conserva los campos no vacíos de la fila CSV representada en `rawFields`. La ficha de estrella los muestra dentro de **Campos disponibles del CSV**.
 
 ## Catálogos estáticos troceados
 
