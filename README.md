@@ -1,9 +1,51 @@
 # DiagramaEstelar
-Visualización de un diagrama de Hertzsprung-Russell
 
+Visualizador interactivo del diagrama de Hertzsprung-Russell preparado para GitHub Pages.
 
-El diagrama de Hertzsprung-Russell (comúnmente abreviado como diagrama H-R) es un gráfico de dispersión de estrellas que indica la relación entre las magnitudes absolutas o luminosidades de las estrellas en comparación con sus clasificaciones espectrales o las temperaturas efectivas. De forma más sencilla, en el gráfico se traza cada estrella para medir su brillo en comparación con su temperatura (color).
+## Objetivo
 
-El diagrama fue creado en 1905 por el astrónomo Ejnar Hertzsprung y, de manera independiente, en 1913 por Henry Norris Russell. El diagrama de Hertzsprung mostraba la luminosidad de las estrellas en función de su color, mientras que el diagrama inicial de Russell mostraba la luminosidad en función del tipo espectral. Ambos diagramas son equivalentes y representan un paso importante hacia la comprensión de la evolución estelar o "la forma en que las estrellas pasan por secuencias de cambios dinámicos y radicales a través del tiempo.
+Crear una página web estática en HTML, CSS y JavaScript para explorar temperatura efectiva, luminosidad, color, clase espectral y regiones evolutivas de las estrellas.
 
-https://es.wikipedia.org/wiki/Diagrama_de_Hertzsprung-Russell 
+## Primera versión
+
+- Renderizado principal en Canvas.
+- Panel lateral tipo hamburguesa.
+- Modo claro y oscuro.
+- Zoom, desplazamiento y encaje automático.
+- Zonas clicables: secuencia principal, gigantes, supergigantes, enanas blancas y franja de inestabilidad.
+- Estrellas de muestra clicables.
+- Nube sintética de puntos para validar rendimiento visual.
+- Importación local de CSV.
+
+## Estructura
+
+```text
+.
+├── index.html
+├── styles.css
+├── app.js
+├── data/stars.sample.json
+└── README.md
+```
+
+## CSV admitido
+
+Campos recomendados:
+
+```csv
+name,teff,luminosity,spectral_type,class,distance_ly,mass,radius,source,notes
+Sol,5772,1,G2V,main-sequence,0.0000158,1,1,Muestra,Referencia solar
+```
+
+También se admiten nombres equivalentes como `temperature`, `st_teff`, `teff_gspphot`, `lum`, `st_lum`, `radius`, `st_rad`, `mass`, `st_mass` y `sy_dist`.
+
+## Fuentes previstas
+
+- Gaia DR3 / ESA como fuente principal para una versión científica amplia.
+- NASA Exoplanet Archive para una capa de estrellas anfitrionas de exoplanetas.
+- Hipparcos / HEASARC para una muestra clásica de estrellas brillantes y cercanas.
+- VizieR / CDS para catálogos especializados.
+
+## Advertencia
+
+La versión actual usa una muestra pedagógica y una nube sintética. No debe tratarse todavía como catálogo científico completo.
