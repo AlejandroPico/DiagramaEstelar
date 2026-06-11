@@ -37,20 +37,15 @@
 
 .star-card-modern .metric-grid {
   margin-top: 12px;
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
 }
 
 .star-card-modern .metric-grid .metric {
   display: none;
-}
-
-.star-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--line);
 }
 
 .star-tab-button {
