@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="catalog-layers.css" />
   <link rel="stylesheet" href="floating-toolbar.css" />
   <link rel="stylesheet" href="loading-progress.css" />
+  <link rel="stylesheet" href="data-panel-refine.css" />
+  <link rel="stylesheet" href="star-card-refine.css" />
 </head>
 <body class="dark">
   <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
@@ -37,41 +39,54 @@
       <button id="zoomValue" class="zoom-chip" type="button">100%</button>
     </nav>
 
+    <div id="emptyDataHint" class="empty-data-hint" role="status">
+      <p><strong>No hay datos cargados.</strong> Pulsa aquí para importar CSV o cargar catálogos.</p>
+    </div>
+
     <section id="layersPopover" class="toolbar-popover" aria-label="Capas del diagrama">
       <section class="panel-section">
         <h3>Capas</h3>
         <label class="switch-row"><input id="starsToggle" type="checkbox" checked /> <span>Estrellas cargadas</span></label>
         <label class="switch-row"><input id="syntheticToggle" type="checkbox" /> <span>Nube pedagógica</span></label>
-        <label class="switch-row"><input id="regionsToggle" type="checkbox" checked /> <span>Regiones evolutivas</span></label>
-        <label class="switch-row"><input id="labelsToggle" type="checkbox" checked /> <span>Etiquetas de zonas</span></label>
+        <label class="switch-row"><input id="regionsToggle" type="checkbox" /> <span>Regiones evolutivas</span></label>
+        <label class="switch-row"><input id="labelsToggle" type="checkbox" /> <span>Etiquetas de zonas</span></label>
         <label class="switch-row"><input id="gridToggle" type="checkbox" checked /> <span>Cuadrícula y ejes</span></label>
         <label class="switch-row"><input id="animationToggle" type="checkbox" /> <span>Animación suave</span></label>
       </section>
     </section>
 
-    <section id="dataPopover" class="toolbar-popover" aria-label="Datos y catálogos">
-      <section class="panel-section">
+    <section id="dataPopover" class="toolbar-popover data-popover" aria-label="Datos y catálogos">
+      <section class="panel-section data-compact-head">
+        <h3>Datos</h3>
+        <p class="data-panel-intro">Carga catálogos reales solo cuando los necesites. El escenario inicial queda vacío para arrancar rápido.</p>
+      </section>
+
+      <section class="data-action-stack" aria-label="Acciones de datos">
+        <label class="data-action primary">
+          <span class="data-action-icon">CSV</span>
+          <span><strong>Importar CSV</strong><small>Archivo local</small></span>
+          <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
+        </label>
+        <button id="repoCatalogButton" class="data-action" type="button" hidden disabled>
+          <span class="data-action-icon">DB</span>
+          <span><strong>Cargar repositorio</strong><small>Catálogos troceados</small></span>
+        </button>
+      </section>
+
+      <p id="dataStatus" class="status-line data-status">Escenario vacío. Carga catálogos cuando quieras.</p>
+
+      <section class="panel-section catalog-section-minimal">
         <h3>Catálogos visibles</h3>
-        <div id="catalogLayerList" class="catalog-layer-list">
-          <p class="hint compact">Carga catálogos reales para activar filtros por fuente.</p>
+        <div id="catalogLayerList" class="catalog-layer-list compact-catalog-list">
+          <p class="hint compact">Aún no hay fuentes cargadas.</p>
         </div>
       </section>
 
-      <section class="panel-section">
-        <h3>Datos</h3>
-        <label class="file-button">
-          Importar CSV local
-          <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
-        </label>
-        <button id="repoCatalogButton" class="action-button secondary" type="button" hidden disabled>Cargar catálogos del repositorio</button>
-        <p id="dataStatus" class="status-line">Escenario vacío. Carga catálogos cuando quieras.</p>
-        <details class="schema-details">
-          <summary>Catálogos y campos admitidos</summary>
-          <p>Importador avanzado para <strong>NASA Exoplanet Archive</strong>, <strong>HYG/ATHYG</strong>, CSV de clasificación estelar tipo Kaggle/Gaia-like y CSV HR genéricos.</p>
-          <p>Campos directos: <code>teff</code>, <code>temperature</code>, <code>temperature_k</code>, <code>st_teff</code>, <code>teff_gspphot</code>, <code>luminosity</code>, <code>lum</code>, <code>st_lum</code>, <code>lum_flame</code>, <code>radius</code>, <code>st_rad</code>, <code>mass</code>, <code>st_mass</code>.</p>
-          <p>HYG/ATHYG: si no existe temperatura explícita, se estima desde <code>ci</code> B−V o <code>spect</code>; si falta <code>lum</code>, se calcula desde <code>absmag</code>.</p>
-        </details>
-      </section>
+      <details class="schema-details data-schema-minimal">
+        <summary>Campos admitidos</summary>
+        <p>NASA Exoplanet Archive, HYG/ATHYG, clasificación estelar tipo Kaggle, Gaia-like y CSV HR genéricos.</p>
+        <p>Campos principales: <code>teff</code>, <code>temperature</code>, <code>st_teff</code>, <code>luminosity</code>, <code>lum</code>, <code>st_lum</code>, <code>radius</code>, <code>mass</code>, <code>spect</code>.</p>
+      </details>
     </section>
 
     <div class="legacy-ui-hidden" aria-hidden="true">
@@ -116,5 +131,7 @@
   <script src="label-rendering.js" defer></script>
   <script src="catalog-layer-filter.js" defer></script>
   <script src="floating-toolbar.js" defer></script>
+  <script src="empty-data-hint.js" defer></script>
+  <script src="star-card-refine.js" defer></script>
 </body>
 </html>
