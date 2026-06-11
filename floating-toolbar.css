@@ -1,0 +1,173 @@
+.floating-toolbar {
+  position: fixed;
+  z-index: 180;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toolbar-search {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.toolbar-search input {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 12px 30px rgba(18, 17, 16, .12);
+  backdrop-filter: blur(16px);
+  outline: 0;
+  padding: 0;
+  transition: width 160ms ease, opacity 120ms ease, padding 160ms ease;
+}
+
+.toolbar-search.open input {
+  width: min(280px, calc(100vw - 282px));
+  opacity: 1;
+  pointer-events: auto;
+  padding: 0 13px;
+}
+
+.toolbar-button,
+.zoom-chip {
+  min-width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 12px 30px rgba(18, 17, 16, .12);
+  backdrop-filter: blur(16px);
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.toolbar-button:hover,
+.zoom-chip:hover,
+.toolbar-button.active {
+  transform: translateY(-1px);
+  border-color: rgba(98,88,255,.46);
+  background: color-mix(in srgb, var(--panel) 82%, var(--accent) 18%);
+}
+
+.toolbar-button svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.zoom-chip {
+  min-width: 62px;
+  padding: 0 11px;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .01em;
+}
+
+.toolbar-popover {
+  position: fixed;
+  z-index: 190;
+  top: 66px;
+  right: 16px;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(76vh, 680px);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 16px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(.985);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.toolbar-popover.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.toolbar-popover .panel-section:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.toolbar-popover .panel-section:last-child {
+  padding-bottom: 0;
+}
+
+.legacy-ui-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  left: -9999px;
+  top: -9999px;
+}
+
+@media (max-width: 720px) {
+  .floating-toolbar {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+
+  .toolbar-button,
+  .zoom-chip {
+    height: 38px;
+    min-width: 38px;
+    border-radius: 14px;
+  }
+
+  .zoom-chip {
+    min-width: 56px;
+    font-size: 11px;
+  }
+
+  .toolbar-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .toolbar-search.open input {
+    position: fixed;
+    left: 10px;
+    right: 250px;
+    top: 10px;
+    width: auto;
+  }
+
+  .toolbar-popover {
+    top: 56px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 74vh;
+    border-radius: 22px;
+  }
+}
