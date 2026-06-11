@@ -9,6 +9,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ## Estado actual
 
 - Renderizado principal en Canvas.
+- Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
 - Panel lateral tipo hamburguesa.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
@@ -19,7 +20,8 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Estrellas de muestra clicables.
 - Nube sintética de puntos para validar rendimiento visual.
 - Importación local avanzada de CSV.
-- Carga opcional de catálogos estáticos troceados desde `data/catalogs/manifest.json`.
+- Carga automática de catálogos estáticos troceados desde `data/catalogs/manifest.json` cuando existe.
+- Filtros visuales por catálogo cargado.
 
 ## Estructura
 
@@ -27,16 +29,20 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 .
 ├── index.html
 ├── styles.css
+├── catalog-layers.css
 ├── app.js
 ├── data-importer.js
 ├── catalog-loader.js
 ├── static-catalog-loader.js
 ├── label-rendering.js
+├── catalog-layer-filter.js
 ├── tools/
 │   └── split-catalogs.py
 ├── data/
 │   ├── catalogs/
-│   │   └── README.md
+│   │   ├── README.md
+│   │   ├── manifest.json
+│   │   └── ...
 │   └── stars.sample.json
 └── README.md
 ```
@@ -76,7 +82,13 @@ data/catalogs/
 └── ...
 ```
 
-Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web muestra el botón **Cargar catálogos del repositorio** y descarga las partes automáticamente.
+Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web descarga automáticamente las partes, recompone cada catálogo como unidad lógica y muestra los filtros de catálogo.
+
+## Filtros por catálogo
+
+Al cargar datos reales, aparece la sección **Catálogos visibles** en el panel lateral. Todos los catálogos aparecen activados por defecto. Cada interruptor permite ocultar o mostrar una fuente concreta sin recargar los CSV.
+
+Esta capa visual trabaja sobre las estrellas ya importadas, así que no elimina datos del navegador; solo cambia qué fuentes se dibujan y qué fuentes son seleccionables con el ratón.
 
 ## Campos recomendados para CSV genérico
 
