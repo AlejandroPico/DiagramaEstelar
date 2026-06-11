@@ -41,11 +41,11 @@
       <section class="panel-section">
         <h3>Capas</h3>
         <label class="switch-row"><input id="starsToggle" type="checkbox" checked /> <span>Estrellas cargadas</span></label>
-        <label class="switch-row"><input id="syntheticToggle" type="checkbox" checked /> <span>Nube pedagógica</span></label>
+        <label class="switch-row"><input id="syntheticToggle" type="checkbox" /> <span>Nube pedagógica</span></label>
         <label class="switch-row"><input id="regionsToggle" type="checkbox" checked /> <span>Regiones evolutivas</span></label>
         <label class="switch-row"><input id="labelsToggle" type="checkbox" checked /> <span>Etiquetas de zonas</span></label>
         <label class="switch-row"><input id="gridToggle" type="checkbox" checked /> <span>Cuadrícula y ejes</span></label>
-        <label class="switch-row"><input id="animationToggle" type="checkbox" checked /> <span>Animación suave</span></label>
+        <label class="switch-row"><input id="animationToggle" type="checkbox" /> <span>Animación suave</span></label>
       </section>
     </section>
 
@@ -64,7 +64,7 @@
           <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
         </label>
         <button id="repoCatalogButton" class="action-button secondary" type="button" hidden disabled>Cargar catálogos del repositorio</button>
-        <p id="dataStatus" class="status-line">Cargando muestra local…</p>
+        <p id="dataStatus" class="status-line">Escenario vacío. Carga catálogos cuando quieras.</p>
         <details class="schema-details">
           <summary>Catálogos y campos admitidos</summary>
           <p>Importador avanzado para <strong>NASA Exoplanet Archive</strong>, <strong>HYG/ATHYG</strong>, CSV de clasificación estelar tipo Kaggle/Gaia-like y CSV HR genéricos.</p>
@@ -81,6 +81,7 @@
       <button id="resetButton" type="button">Reiniciar</button>
       <button id="zoomOutButton" type="button">−</button>
       <button id="zoomInButton" type="button">+</button>
+      <button id="densityButton" type="button">Densidad</button>
     </div>
 
     <aside id="sidePanel" class="legacy-ui-hidden" aria-hidden="true"></aside>
@@ -107,6 +108,7 @@
       </div>
     </div>
   </main>
+  <script src="startup-empty-mode.js" defer></script>
   <script src="app.js" defer></script>
   <script src="data-importer.js" defer></script>
   <script src="catalog-loader.js" defer></script>
