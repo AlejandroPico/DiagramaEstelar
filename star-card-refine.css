@@ -139,13 +139,11 @@
 }
 
 .star-search-link {
-  min-height: 74px;
+  min-height: 64px;
   border: 0;
   border-bottom: 1px solid var(--line);
   display: grid;
-  grid-template-columns: 38px 1fr;
   align-items: center;
-  gap: 12px;
   color: var(--ink);
   text-decoration: none;
   background: transparent;
@@ -156,13 +154,7 @@
 }
 
 .star-search-icon {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  font-size: 22px;
-  font-weight: 950;
-  line-height: 1;
+  display: none;
 }
 
 .star-search-link strong {
