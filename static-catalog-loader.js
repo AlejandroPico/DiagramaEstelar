@@ -2,6 +2,7 @@
 
 (() => {
   const MANIFEST_URL = 'data/catalogs/manifest.json';
+  const AUTO_LOAD_REPO_CATALOGS = true;
   const button = document.getElementById('repoCatalogButton');
   if (!button || !ui.csv || typeof ui.csv.onchange !== 'function') return;
 
@@ -17,40 +18,55 @@
       const chunkCount = manifest.datasets.reduce((sum, dataset) => sum + (Array.isArray(dataset.chunks) ? dataset.chunks.length : 0), 0);
       button.hidden = false;
       button.disabled = false;
-      button.textContent = `Cargar catálogos del repositorio (${chunkCount} partes)`;
-      button.onclick = () => loadStaticCatalogs(manifest);
+      button.textContent = `Recargar catálogos del repositorio (${manifest.datasets.length} catálogos / ${chunkCount} partes)`;
+      button.onclick = () => loadStaticCatalogs(manifest, { auto: false });
+
+      if (AUTO_LOAD_REPO_CATALOGS && !window.__hrRepoCatalogAutoLoaded) {
+        window.__hrRepoCatalogAutoLoaded = true;
+        window.setTimeout(() => loadStaticCatalogs(manifest, { auto: true }), 120);
+      }
     } catch (error) {
       // Si no existe manifest.json, el proyecto sigue funcionando con importación local.
     }
   }
 
-  async function loadStaticCatalogs(manifest) {
-    const chunks = manifest.datasets.flatMap(dataset => (dataset.chunks || []).map(chunk => ({ ...chunk, dataset })));
-    if (!chunks.length) {
+  async function loadStaticCatalogs(manifest, options = {}) {
+    const datasets = manifest.datasets.filter(dataset => Array.isArray(dataset.chunks) && dataset.chunks.length);
+    if (!datasets.length) {
       ui.status.textContent = 'El manifest de catálogos no contiene partes CSV.';
       return;
     }
 
     button.disabled = true;
     const files = [];
+    const totalChunks = datasets.reduce((sum, dataset) => sum + dataset.chunks.length, 0);
+    let loadedChunks = 0;
 
     try {
-      for (let i = 0; i < chunks.length; i++) {
-        const item = chunks[i];
-        const path = item.path || item.url;
-        if (!path) continue;
+      for (const dataset of datasets) {
+        const blobs = [];
+        const label = dataset.label || dataset.id || 'catálogo';
 
-        ui.status.textContent = `Descargando catálogo ${i + 1}/${chunks.length}: ${item.dataset.label || item.dataset.id || 'catálogo'}…`;
-        const res = await fetch(path, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`No se pudo descargar ${path}: HTTP ${res.status}`);
-        const blob = await res.blob();
-        const filename = path.split('/').pop() || `catalog-part-${i + 1}.csv`;
-        files.push(new File([blob], filename, { type: 'text/csv' }));
+        for (const chunk of dataset.chunks) {
+          loadedChunks++;
+          const path = chunk.path || chunk.url;
+          if (!path) continue;
+
+          ui.status.textContent = `${options.auto ? 'Cargando' : 'Descargando'} catálogos ${loadedChunks}/${totalChunks}: ${label}…`;
+          const res = await fetch(path, { cache: 'no-store' });
+          if (!res.ok) throw new Error(`No se pudo descargar ${path}: HTTP ${res.status}`);
+          blobs.push(await res.blob());
+        }
+
+        if (blobs.length) {
+          const filename = dataset.source_file || `${dataset.id || label}.csv`;
+          files.push(new File(blobs, filename, { type: 'text/csv' }));
+        }
       }
 
-      if (!files.length) throw new Error('No se descargó ninguna parte CSV válida.');
+      if (!files.length) throw new Error('No se descargó ningún catálogo CSV válido.');
 
-      ui.status.textContent = `Catálogos descargados. Procesando ${files.length} parte(s)…`;
+      ui.status.textContent = `Catálogos descargados. Procesando ${files.length} catálogo(s)…`;
       await ui.csv.onchange({ target: { files, value: '' } });
     } catch (error) {
       console.error(error);
