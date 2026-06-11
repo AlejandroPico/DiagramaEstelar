@@ -1,0 +1,10 @@
+[
+  {"name":"Sol","designation":"G2V","class":"main-sequence","teff":5772,"luminosity":1,"radius":1,"color":"#fff3b0","notes":"Referencia solar."},
+  {"name":"Proxima Centauri","designation":"M5.5Ve","class":"main-sequence","teff":3042,"luminosity":0.0017,"radius":0.15,"color":"#ff8d63","notes":"Enana roja cercana."},
+  {"name":"Sirio A","designation":"A1V","class":"main-sequence","teff":9940,"luminosity":25.4,"radius":1.71,"color":"#cfe4ff","notes":"Estrella blanca-azulada."},
+  {"name":"Vega","designation":"A0V","class":"main-sequence","teff":9602,"luminosity":40.1,"radius":2.36,"color":"#d8e9ff","notes":"Estrella A de referencia."},
+  {"name":"Arcturus","designation":"K1.5III","class":"giant","teff":4286,"luminosity":170,"radius":25.4,"color":"#ffb06b","notes":"Gigante naranja."},
+  {"name":"Betelgeuse","designation":"M1-M2 Ia-ab","class":"supergiant","teff":3600,"luminosity":126000,"radius":764,"color":"#ff744f","notes":"Supergigante roja."},
+  {"name":"Rigel","designation":"B8Ia","class":"supergiant","teff":12100,"luminosity":120000,"radius":78.9,"color":"#b7d5ff","notes":"Supergigante azul."},
+  {"name":"Sirio B","designation":"DA2","class":"white-dwarf","teff":25200,"luminosity":0.056,"radius":0.0084,"color":"#a9ccff","notes":"Enana blanca."}
+]
