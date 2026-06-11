@@ -10,7 +10,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 
 - Renderizado principal en Canvas.
 - Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
-- Arranque ligero: la página no descarga automáticamente los catálogos grandes del repositorio.
+- Arranque vacío: la página muestra el diagrama, los colores, las regiones y los controles sin cargar estrellas ni catálogos.
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
@@ -21,8 +21,6 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Ejes flotantes siempre visibles.
 - Ejes adaptativos con marcas intermedias según el zoom.
 - Zonas clicables: secuencia principal, gigantes, supergigantes, enanas blancas y franja de inestabilidad.
-- Estrellas de muestra clicables.
-- Nube sintética de puntos para validar rendimiento visual.
 - Importación local avanzada de CSV.
 - Detección de catálogos estáticos troceados desde `data/catalogs/manifest.json` cuando existe.
 - Filtros visuales por catálogo cargado.
@@ -37,6 +35,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── floating-toolbar.css
 ├── loading-progress.css
 ├── app.js
+├── startup-empty-mode.js
 ├── data-importer.js
 ├── catalog-loader.js
 ├── static-catalog-loader.js
@@ -63,6 +62,12 @@ La interfaz principal ya no usa menú hamburguesa visible. Las herramientas vive
 - **Datos**: abre el panel de catálogos visibles, importación CSV, carga de catálogos del repositorio y ayuda de campos admitidos.
 - **Capas**: abre los interruptores de estrellas cargadas, nube pedagógica, regiones, etiquetas, cuadrícula/ejes y animación.
 - **Zoom**: muestra el porcentaje actual. Al pulsarlo, restablece la vista al 100%.
+
+## Arranque vacío
+
+La aplicación no carga estrellas de muestra ni catálogos al abrir la página. El script `startup-empty-mode.js` intercepta la muestra local, limpia cualquier nube sintética inicial y oculta la pantalla de carga cuando el escenario está listo.
+
+El objetivo es evitar bloqueos de arranque y dejar que el usuario decida cuándo cargar datos reales desde el panel **Datos**.
 
 ## Importación de catálogos
 
@@ -131,4 +136,4 @@ El dibujo de grandes volúmenes usa un modo rápido de puntos en Canvas, reserva
 
 ## Advertencia
 
-La muestra inicial sigue siendo pedagógica. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
+La pantalla inicial no representa un catálogo científico; es un escenario HR vacío preparado para cargar datos. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
