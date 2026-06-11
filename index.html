@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Visor interactivo del diagrama de Hertzsprung-Russell." />
+  <title>Diagrama Estelar — Hertzsprung-Russell interactivo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
+    <section id="viewport" class="viewport" aria-label="Escenario del diagrama estelar">
+      <canvas id="hrCanvas" class="hr-canvas" aria-label="Diagrama de Hertzsprung-Russell renderizado en Canvas"></canvas>
+    </section>
+
+    <header class="brand-panel" aria-label="Cabecera del proyecto">
+      <button id="menuButton" class="icon-button menu-button" aria-label="Abrir menú lateral" title="Menú">
+        <span></span><span></span><span></span>
+      </button>
+      <div>
+        <p class="eyebrow">Visualizador astronómico</p>
+        <h1>Diagrama Estelar</h1>
+      </div>
+    </header>
+
+    <aside id="sidePanel" class="side-panel" aria-hidden="true" aria-label="Panel temporal de herramientas">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Controles</p>
+          <h2>Exploración HR</h2>
+        </div>
+        <button id="closePanelButton" class="ghost-button" aria-label="Cerrar panel">×</button>
+      </div>
+
+      <section class="panel-section">
+        <h3>Vista</h3>
+        <div class="control-grid">
+          <button id="fitButton" class="action-button">Encajar</button>
+          <button id="resetButton" class="action-button secondary">Reiniciar</button>
+        </div>
+        <div class="control-grid three">
+          <button id="zoomOutButton" class="mini-button">−</button>
+          <div id="zoomValue" class="zoom-value">100%</div>
+          <button id="zoomInButton" class="mini-button">+</button>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <h3>Capas</h3>
+        <label class="switch-row"><input id="starsToggle" type="checkbox" checked /> <span>Estrellas de muestra</span></label>
+        <label class="switch-row"><input id="syntheticToggle" type="checkbox" checked /> <span>Nube pedagógica</span></label>
+        <label class="switch-row"><input id="regionsToggle" type="checkbox" checked /> <span>Regiones evolutivas</span></label>
+        <label class="switch-row"><input id="labelsToggle" type="checkbox" checked /> <span>Etiquetas de zonas</span></label>
+        <label class="switch-row"><input id="gridToggle" type="checkbox" checked /> <span>Cuadrícula y ejes</span></label>
+        <label class="switch-row"><input id="animationToggle" type="checkbox" checked /> <span>Animación suave</span></label>
+      </section>
+
+      <section class="panel-section">
+        <h3>Color</h3>
+        <div class="control-grid">
+          <button id="themeButton" class="action-button">Modo oscuro</button>
+          <button id="densityButton" class="action-button secondary">Densidad</button>
+        </div>
+        <p class="hint">Canvas evita generar miles de nodos DOM. La nube pedagógica simula densidades estelares; no es un catálogo real.</p>
+      </section>
+
+      <section class="panel-section">
+        <h3>Búsqueda rápida</h3>
+        <div class="search-box">
+          <input id="searchInput" type="search" placeholder="Sol, Vega, gigante roja..." autocomplete="off" />
+          <button id="searchButton">Ir</button>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <h3>Datos</h3>
+        <label class="file-button">
+          Importar CSV local
+          <input id="csvInput" type="file" accept=".csv,text/csv" hidden />
+        </label>
+        <p id="dataStatus" class="status-line">Cargando muestra local…</p>
+        <details class="schema-details">
+          <summary>Campos CSV admitidos</summary>
+          <p><code>name</code>, <code>teff</code>/<code>temperature</code>, <code>luminosity</code>/<code>lum</code>, <code>spectral_type</code>, <code>class</code>, <code>distance_ly</code>, <code>mass</code>, <code>radius</code>, <code>source</code>, <code>notes</code>.</p>
+        </details>
+      </section>
+    </aside>
+
+    <div id="panelBackdrop" class="panel-backdrop" aria-hidden="true"></div>
+
+    <section id="infoCard" class="info-card" aria-hidden="true" aria-label="Ficha informativa">
+      <button id="closeCardButton" class="close-card" aria-label="Cerrar ficha">×</button>
+      <p id="cardKicker" class="eyebrow">Zona seleccionada</p>
+      <h2 id="cardTitle">Secuencia principal</h2>
+      <p id="cardSubtitle" class="card-subtitle">Región central del diagrama HR</p>
+      <div id="cardMetrics" class="metric-grid"></div>
+      <p id="cardDescription" class="card-description"></p>
+      <div id="cardNotes" class="card-notes"></div>
+    </section>
+
+    <div id="cursorHud" class="cursor-hud" aria-hidden="true"></div>
+    <div id="loadingOverlay" class="loading-overlay" aria-live="polite">
+      <div class="loader-star"></div>
+      <p>Preparando diagrama estelar…</p>
+    </div>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
