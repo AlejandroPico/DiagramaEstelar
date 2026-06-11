@@ -10,12 +10,13 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 
 - Renderizado principal en Canvas.
 - Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
-- Arranque vacío: la página muestra solo fondo, bandas espectrales, cuadrícula, ejes y controles; no carga estrellas ni catálogos.
+- Arranque vacío: la página muestra solo fondo, degradado espectral continuo, cuadrícula, ejes y controles; no carga estrellas ni catálogos.
 - Esquema de cuatro ejes: luminosidad izquierda, magnitud absoluta derecha, tipo espectral arriba y color B−V abajo.
+- Degradado espectral suavizado para evitar cortes verticales duros entre bandas de color.
 - Regiones evolutivas, etiquetas de zonas, nube pedagógica y animación arrancan desactivadas.
 - Burbuja inicial apuntando al botón de datos cuando no hay catálogos cargados.
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, información, modo claro/oscuro, datos, capas y zoom.
-- Botón de información con guía científica del diagrama HR, tipos espectrales, evolución estelar, regiones y catálogos.
+- Botón de información con guía científica ampliada del diagrama HR, organizada en 14 capítulos.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
 - Panel de datos minimalista con dos acciones principales iguales y centradas: importar CSV y cargar repositorio propio.
@@ -91,21 +92,28 @@ La capa `hr-four-axis-overlay.js` sustituye el renderizado base de ejes y reserv
 - **Arriba**: tipo espectral O, B, A, F, G, K, M, con marcas de temperatura de referencia.
 - **Abajo**: color B−V estimado a partir de temperatura efectiva.
 
-La navegación, el zoom, la cuadrícula y la selección de estrellas siguen usando las mismas coordenadas internas de temperatura y luminosidad.
+La navegación, el zoom, la cuadrícula y la selección de estrellas siguen usando las mismas coordenadas internas de temperatura y luminosidad. La misma capa reemplaza las bandas espectrales verticales por un degradado continuo interpolado por temperatura.
 
 ## Guía informativa
 
-El botón de información abre una ventana enciclopédica organizada por secciones:
+El botón de información abre una ventana enciclopédica organizada en 14 capítulos:
 
 - **Qué estás viendo**: explicación general del diagrama HR.
-- **Ejes y escala**: temperatura, luminosidad y lectura espacial del gráfico.
-- **OBAFGKM**: clases espectrales, color y temperatura.
-- **Vida estelar**: nacimiento, fusión nuclear, secuencia principal y destino final.
-- **Regiones**: secuencia principal, subgigantes, gigantes, supergigantes, enanas blancas y franja de inestabilidad.
-- **Cómo leer datos**: interpretación de una estrella concreta.
-- **Catálogos**: procedencia, estimaciones y cautelas científicas.
+- **Historia del diagrama**: origen histórico y valor científico.
+- **Ejes y escala**: temperatura, luminosidad, magnitud y lectura espacial del gráfico.
+- **Temperatura y color**: relación entre energía superficial, color y radiación térmica.
+- **Tipos OBAFGKM**: clases espectrales, subtipos y significado físico.
+- **Luminosidad**: energía real emitida frente a brillo aparente.
+- **Magnitud absoluta**: escala astronómica comparada a distancia común.
+- **Color B−V**: índice fotométrico y lectura del eje inferior.
+- **Secuencia principal**: fusión estable de hidrógeno y masa inicial.
+- **Vida estelar**: nacimiento, equilibrio, evolución y finales posibles.
+- **Regiones HR**: subgigantes, gigantes, supergigantes, enanas blancas y clases intermedias.
+- **Variables e inestabilidad**: pulsaciones, Cefeidas, RR Lyrae y distancia cósmica.
+- **Leer una estrella**: interpretación visual y de ficha técnica.
+- **Catálogos y límites**: procedencia, datos derivados, sesgos y cautelas científicas.
 
-La guía usa navegación por secciones, contenido desplazable con rueda o gesto táctil y scrollbar oculto.
+La guía usa navegación por secciones, contenido desplazable con rueda o gesto táctil, scrollbar oculto y enlaces externos de apoyo.
 
 ## Arranque vacío
 
