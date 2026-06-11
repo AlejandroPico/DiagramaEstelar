@@ -1,5 +1,5 @@
 .data-popover {
-  width: min(360px, calc(100vw - 32px));
+  width: min(380px, calc(100vw - 32px));
 }
 
 .data-compact-head {
@@ -15,20 +15,21 @@
 
 .data-action-stack {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin: 8px 0 10px;
+  margin: 9px 0 10px;
 }
 
 .data-action {
   width: 100%;
-  min-height: 48px;
+  min-height: 58px;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 8px 10px;
+  border-radius: 17px;
+  padding: 10px 12px;
   display: grid;
-  grid-template-columns: 38px 1fr;
   align-items: center;
-  gap: 10px;
+  justify-items: start;
+  gap: 2px;
   background: rgba(255,255,255,.045);
   color: var(--ink);
   text-align: left;
@@ -47,16 +48,7 @@
 }
 
 .data-action-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: rgba(98,88,255,.18);
-  color: var(--ink);
-  font-size: 10px;
-  font-weight: 950;
-  letter-spacing: .05em;
+  display: none;
 }
 
 .data-action strong {
@@ -67,10 +59,10 @@
 
 .data-action small {
   display: block;
-  margin-top: 3px;
+  margin-top: 4px;
   color: var(--muted);
-  font-size: 11px;
-  line-height: 1.05;
+  font-size: 10.5px;
+  line-height: 1.15;
 }
 
 .data-status {
@@ -165,6 +157,10 @@
 }
 
 @media (max-width: 720px) {
+  .data-action-stack {
+    grid-template-columns: 1fr;
+  }
+
   .empty-data-hint {
     top: 54px;
     right: 84px;
