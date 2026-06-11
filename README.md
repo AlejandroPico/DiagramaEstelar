@@ -19,6 +19,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Estrellas de muestra clicables.
 - Nube sintética de puntos para validar rendimiento visual.
 - Importación local avanzada de CSV.
+- Carga opcional de catálogos estáticos troceados desde `data/catalogs/manifest.json`.
 
 ## Estructura
 
@@ -29,7 +30,13 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── app.js
 ├── data-importer.js
 ├── catalog-loader.js
+├── static-catalog-loader.js
+├── label-rendering.js
+├── tools/
+│   └── split-catalogs.py
 ├── data/
+│   ├── catalogs/
+│   │   └── README.md
 │   └── stars.sample.json
 └── README.md
 ```
@@ -44,6 +51,32 @@ El cargador avanzado reconoce actualmente:
 - **HYG / ATHYG / HYG-like**: detecta `proper`, `spect`, `ci`, `lum`, `absmag`, `dist`, `hip`, `hd`, `gl`. Si no hay temperatura explícita, estima temperatura desde B−V (`ci`) o clase espectral. Si no hay `lum`, calcula luminosidad desde magnitud absoluta (`absmag`).
 - **CSV de clasificación estelar tipo Kaggle**: detecta `Temperature (K)`, `Luminosity(L/Lo)`, `Radius(R/Ro)`, `Star type`, `Star color`, `Spectral Class`.
 - **CSV HR genéricos / Gaia-like**: reconoce campos como `teff`, `temperature`, `temperature_k`, `effective_temperature`, `teff_gspphot`, `luminosity`, `lum`, `lum_flame`, `radius`, `st_rad`, `mass`, `st_mass`, `sy_dist`.
+
+## Catálogos estáticos troceados
+
+GitHub permite subir archivos de hasta 25 MiB desde la interfaz web, así que los CSV grandes deben dividirse si se quieren mantener dentro del repositorio y servirlos con GitHub Pages.
+
+Flujo recomendado:
+
+```bash
+python tools/split-catalogs.py "C:/ruta/a/mis_csv" --out data/catalogs --max-mib 22 --clean
+```
+
+El script genera:
+
+```text
+data/catalogs/
+├── manifest.json
+├── ps-2026-06-10-19-21-45/
+│   ├── part-001.csv
+│   └── ...
+├── hyg-v42/
+│   ├── part-001.csv
+│   └── ...
+└── ...
+```
+
+Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web muestra el botón **Cargar catálogos del repositorio** y descarga las partes automáticamente.
 
 ## Campos recomendados para CSV genérico
 
