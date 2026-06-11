@@ -13,7 +13,10 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Arranque vacío: la página muestra solo fondo, degradado espectral continuo, cuadrícula, ejes y controles; no carga estrellas ni catálogos.
 - Esquema de cuatro ejes: luminosidad izquierda, magnitud absoluta derecha, tipo espectral arriba y color B−V abajo.
 - Degradado espectral suavizado para evitar cortes verticales duros entre bandas de color.
-- Regiones evolutivas, etiquetas de zonas, nube pedagógica y animación arrancan desactivadas.
+- Zonas evolutivas redibujadas con contornos curvos, halo difuminado y relleno gradual.
+- Nombres de zonas flotantes: intentan mantenerse dentro del área visible y evitar solapamientos.
+- La antigua nube pedagógica queda oculta del panel de capas.
+- Regiones evolutivas, etiquetas de zonas y animación arrancan desactivadas.
 - Burbuja inicial apuntando al botón de datos cuando no hay catálogos cargados.
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, información, modo claro/oscuro, datos, capas y zoom.
 - Botón de información con guía científica ampliada del diagrama HR, organizada en 14 capítulos.
@@ -49,6 +52,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── info-guide.css
 ├── app.js
 ├── hr-four-axis-overlay.js
+├── evolutionary-regions-polish.js
 ├── startup-empty-mode.js
 ├── data-importer.js
 ├── catalog-loader.js
@@ -80,7 +84,7 @@ La interfaz principal ya no usa menú hamburguesa visible. Las herramientas vive
 - **Información**: abre una guía científica extensa sobre el diagrama de Hertzsprung-Russell.
 - **Luna/Sol**: alterna entre modo oscuro y claro. La app arranca en modo oscuro.
 - **Datos**: abre el panel de catálogos visibles, importación CSV, carga de catálogos del repositorio y ayuda de campos admitidos.
-- **Capas**: abre los interruptores de estrellas cargadas, nube pedagógica, regiones, etiquetas, cuadrícula/ejes y animación.
+- **Capas**: abre los interruptores de estrellas cargadas, zonas evolutivas, nombres de zonas, cuadrícula/ejes y animación.
 - **Zoom**: muestra el porcentaje actual. Al pulsarlo, restablece la vista al 100%.
 
 ## Ejes del diagrama
@@ -93,6 +97,18 @@ La capa `hr-four-axis-overlay.js` sustituye el renderizado base de ejes y reserv
 - **Abajo**: color B−V estimado a partir de temperatura efectiva.
 
 La navegación, el zoom, la cuadrícula y la selección de estrellas siguen usando las mismas coordenadas internas de temperatura y luminosidad. La misma capa reemplaza las bandas espectrales verticales por un degradado continuo interpolado por temperatura.
+
+## Zonas evolutivas
+
+La capa `evolutionary-regions-polish.js` reemplaza el dibujo angular original de regiones por zonas pedagógicas más suaves:
+
+- Contornos cerrados construidos con curvas cuadráticas.
+- Relleno translúcido y halo difuminado para evitar sensación de frontera exacta.
+- Línea exterior redondeada; la franja de inestabilidad se dibuja con trazo discontinuo.
+- Etiquetas flotantes que se mantienen dentro del área visible y desplazan su posición si detectan solapamiento.
+- Selección y hover siguen funcionando mediante la misma geometría suavizada.
+
+Estas zonas siguen siendo una ayuda visual, no una frontera astrofísica exacta.
 
 ## Guía informativa
 
@@ -204,4 +220,4 @@ El dibujo de grandes volúmenes usa un modo rápido de puntos en Canvas, reserva
 
 ## Advertencia
 
-La pantalla inicial no representa un catálogo científico; es un escenario HR vacío preparado para cargar datos. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
+La pantalla inicial no representa un catálogo científico; es un escenario HR vacío preparado para cargar datos. Las zonas evolutivas son orientativas y no constituyen fronteras observacionales exactas. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
