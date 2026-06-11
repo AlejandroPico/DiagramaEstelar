@@ -16,8 +16,10 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
-- Panel de datos minimalista con importación CSV, carga de repositorio y catálogos visibles.
-- Ficha de estrella compacta, con métricas principales y campos CSV conservados durante la importación.
+- Panel de datos minimalista con dos acciones principales: importar CSV y cargar repositorio propio.
+- Ficha de estrella compacta, desplazable, reposicionada para evitar tapar la selección y organizada por pestañas internas.
+- Pestaña CSV paginada para acceder a todos los campos conservados sin scroll vertical interno.
+- Enlaces externos de búsqueda en Wikipedia y Google desde la ficha.
 - Pantalla de carga con detalle textual y barra de progreso para catálogos pesados.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
@@ -77,6 +79,19 @@ La aplicación no carga estrellas de muestra ni catálogos al abrir la página. 
 
 El objetivo es evitar bloqueos de arranque y dejar que el usuario decida cuándo cargar datos reales desde el panel **Datos**.
 
+## Ficha de estrella
+
+La ficha se reorganiza en pestañas internas:
+
+- **Resumen**: datos esenciales, fuente y enlaces externos.
+- **Identidad**: nombres, claves y designaciones.
+- **Física**: temperatura, luminosidad, radio, masa, color, clase espectral y magnitudes.
+- **Posición**: distancia, coordenadas, movimiento propio y velocidad radial cuando existan.
+- **Catálogo**: metadatos de origen, planetas, banderas y fuentes internas.
+- **CSV**: campos originales conservados, paginados para evitar scroll vertical dentro de la ficha.
+
+La ficha intenta abrirse en una zona que no tape la estrella seleccionada y también puede arrastrarse manualmente.
+
 ## Importación de catálogos
 
 La aplicación acepta uno o varios CSV locales desde el panel de datos. El fichero no se sube a ningún servidor: se procesa en el navegador.
@@ -88,7 +103,7 @@ El cargador avanzado reconoce actualmente:
 - **CSV de clasificación estelar tipo Kaggle**: detecta `Temperature (K)`, `Luminosity(L/Lo)`, `Radius(R/Ro)`, `Star type`, `Star color`, `Spectral Class`.
 - **CSV HR genéricos / Gaia-like**: reconoce campos como `teff`, `temperature`, `temperature_k`, `effective_temperature`, `teff_gspphot`, `luminosity`, `lum`, `lum_flame`, `radius`, `st_rad`, `mass`, `st_mass`, `sy_dist`.
 
-`catalog-loader-enhanced.js` conserva los campos no vacíos de la fila CSV representada en `rawFields`. La ficha de estrella los muestra dentro de **Campos disponibles del CSV**.
+`catalog-loader-enhanced.js` conserva los campos no vacíos de la fila CSV representada en `rawFields`. La ficha de estrella los muestra dentro de la pestaña **CSV**.
 
 ## Catálogos estáticos troceados
 
@@ -114,7 +129,7 @@ data/catalogs/
 └── ...
 ```
 
-Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web muestra el botón **Cargar catálogos del repositorio** dentro del panel de datos. La descarga ya no es automática para evitar bloqueos de arranque.
+Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web muestra el botón **Cargar repositorio propio** dentro del panel de datos. La descarga ya no es automática para evitar bloqueos de arranque.
 
 Durante la carga manual, la pantalla de carga muestra qué parte se está descargando y una barra de progreso. Al terminar la descarga, el navegador procesa los catálogos en memoria mediante Web Worker.
 
