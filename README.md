@@ -11,6 +11,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Renderizado principal en Canvas.
 - Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
 - Arranque vacío: la página muestra solo fondo, bandas espectrales, cuadrícula, ejes y controles; no carga estrellas ni catálogos.
+- Esquema de cuatro ejes: luminosidad izquierda, magnitud absoluta derecha, tipo espectral arriba y color B−V abajo.
 - Regiones evolutivas, etiquetas de zonas, nube pedagógica y animación arrancan desactivadas.
 - Burbuja inicial apuntando al botón de datos cuando no hay catálogos cargados.
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, información, modo claro/oscuro, datos, capas y zoom.
@@ -46,6 +47,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── star-card-refine.css
 ├── info-guide.css
 ├── app.js
+├── hr-four-axis-overlay.js
 ├── startup-empty-mode.js
 ├── data-importer.js
 ├── catalog-loader.js
@@ -79,6 +81,17 @@ La interfaz principal ya no usa menú hamburguesa visible. Las herramientas vive
 - **Datos**: abre el panel de catálogos visibles, importación CSV, carga de catálogos del repositorio y ayuda de campos admitidos.
 - **Capas**: abre los interruptores de estrellas cargadas, nube pedagógica, regiones, etiquetas, cuadrícula/ejes y animación.
 - **Zoom**: muestra el porcentaje actual. Al pulsarlo, restablece la vista al 100%.
+
+## Ejes del diagrama
+
+La capa `hr-four-axis-overlay.js` sustituye el renderizado base de ejes y reserva margen específico para mostrar cuatro escalas simultáneas:
+
+- **Izquierda**: luminosidad relativa al Sol, L☉.
+- **Derecha**: magnitud absoluta aproximada, calculada desde luminosidad mediante una conversión bolométrica de referencia solar.
+- **Arriba**: tipo espectral O, B, A, F, G, K, M, con marcas de temperatura de referencia.
+- **Abajo**: color B−V estimado a partir de temperatura efectiva.
+
+La navegación, el zoom, la cuadrícula y la selección de estrellas siguen usando las mismas coordenadas internas de temperatura y luminosidad.
 
 ## Guía informativa
 
