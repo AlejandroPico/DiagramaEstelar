@@ -1,0 +1,68 @@
+.loading-overlay {
+  text-align: center;
+  padding: 24px;
+}
+
+.loading-overlay .loading-copy {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  max-width: min(520px, calc(100vw - 40px));
+}
+
+.loading-overlay h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(18px, 2.6vw, 28px);
+  letter-spacing: -0.04em;
+}
+
+.loading-overlay p {
+  margin: 0;
+}
+
+.loading-detail {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.loading-progress-track {
+  width: min(420px, calc(100vw - 56px));
+  height: 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,.08);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.loading-progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), #4c9dff, var(--accent-2));
+  transition: width 180ms ease;
+}
+
+.loading-progress-percent {
+  min-height: 16px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 950;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.loading-overlay.progress-mode .loading-progress-track,
+.loading-overlay.progress-mode .loading-progress-percent {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.loading-overlay.error-mode .loading-progress-bar {
+  background: linear-gradient(90deg, #ff6b6b, #ff9f5a);
+}
