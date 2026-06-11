@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="catalog-layers.css" />
   <link rel="stylesheet" href="floating-toolbar.css" />
+  <link rel="stylesheet" href="loading-progress.css" />
 </head>
 <body class="dark">
   <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
@@ -98,7 +99,12 @@
     <div id="cursorHud" class="cursor-hud" aria-hidden="true"></div>
     <div id="loadingOverlay" class="loading-overlay" aria-live="polite">
       <div class="loader-star"></div>
-      <p>Preparando diagrama estelar…</p>
+      <div class="loading-copy">
+        <h2 id="loadingTitle">Preparando diagrama estelar…</h2>
+        <p id="loadingDetail" class="loading-detail">Inicializando motor visual…</p>
+        <div class="loading-progress-track" aria-hidden="true"><div id="loadingProgressBar" class="loading-progress-bar"></div></div>
+        <div id="loadingProgressPercent" class="loading-progress-percent">0%</div>
+      </div>
     </div>
   </main>
   <script src="app.js" defer></script>
