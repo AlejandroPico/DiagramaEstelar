@@ -19,24 +19,34 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: 72px;
+  align-items: stretch;
   gap: 10px;
   margin: 10px 0 10px;
 }
 
 .data-action {
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
   width: 100%;
   height: 72px;
   min-height: 72px;
+  max-height: 72px;
+  margin: 0;
   border: 1px solid var(--line);
   border-radius: 16px;
-  padding: 10px 12px;
+  padding: 0 12px;
   display: grid;
   place-items: center;
+  align-self: stretch;
+  justify-self: stretch;
   background: rgba(255,255,255,.04);
   color: var(--ink);
   text-align: center;
   box-shadow: none;
   font: inherit;
+  line-height: 1;
+  vertical-align: top;
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
 }
 
@@ -54,6 +64,8 @@
   display: grid;
   place-items: center;
   gap: 4px;
+  width: 100%;
+  min-height: 0;
 }
 
 .data-action-icon {
@@ -188,6 +200,7 @@
   .data-action {
     height: 62px;
     min-height: 62px;
+    max-height: 62px;
   }
 
   .data-schema-minimal p {
