@@ -4,12 +4,12 @@
   if (typeof cardStar !== 'function') return;
 
   const previousCardRegion = typeof cardRegion === 'function' ? cardRegion : null;
-  const tabState = { active: 'resumen', rawPage: 0 };
+  const tabState = { active: 'resumen', pages: {} };
   let dragState = null;
 
   cardStar = function refinedCardStar(star) {
     tabState.active = 'resumen';
-    tabState.rawPage = 0;
+    tabState.pages = {};
     renderStarCard(star);
     placeCardAwayFromStar(star);
     enableDrag();
@@ -40,14 +40,14 @@
     ui.cardMetrics.querySelectorAll('[data-star-tab]').forEach(button => {
       button.addEventListener('click', () => {
         tabState.active = button.dataset.starTab;
-        if (tabState.active !== 'csv') tabState.rawPage = 0;
         renderStarCard(star);
       });
     });
 
-    infoCard.querySelectorAll('[data-raw-page]').forEach(button => {
+    infoCard.querySelectorAll('[data-tab-page]').forEach(button => {
       button.addEventListener('click', () => {
-        tabState.rawPage = Number(button.dataset.rawPage || 0);
+        const tab = button.dataset.tabKey || tabState.active;
+        tabState.pages[tab] = Number(button.dataset.tabPage || 0);
         renderStarCard(star);
       });
     });
@@ -60,69 +60,64 @@
       { id: 'fisica', label: 'Física', count: categorized.fisica.length },
       { id: 'posicion', label: 'Posición', count: categorized.posicion.length },
       { id: 'catalogo', label: 'Catálogo', count: categorized.catalogo.length },
-      { id: 'csv', label: `CSV (${categorized.csv.length})`, count: categorized.csv.length }
-    ].filter(tab => tab.id === 'resumen' || tab.count > 0);
+      { id: 'csv', label: `CSV (${categorized.csv.length})`, count: categorized.csv.length },
+      { id: 'fuentes', label: 'Fuentes', count: 2 }
+    ].filter(tab => tab.id === 'resumen' || tab.id === 'fuentes' || tab.count > 0);
   }
 
   function renderActiveTab(star, categorized, tabs) {
     if (!tabs.some(tab => tab.id === tabState.active)) tabState.active = 'resumen';
-
-    if (tabState.active === 'resumen') return renderResumen(star, categorized);
-    if (tabState.active === 'csv') return renderCsvTab(categorized.csv);
-    return renderGrid(categorized[tabState.active] || [], `No hay datos disponibles en esta categoría para ${star.name || 'esta estrella'}.`);
+    if (tabState.active === 'fuentes') return renderExternalSearch(star);
+    return renderPagedTab(tabState.active, categorized[tabState.active] || [], star);
   }
 
-  function renderResumen(star, categorized) {
-    const external = encodeURIComponent(searchName(star));
-    const fields = [
-      ['Nombre', star.name || '—', true],
-      ['Fuente', star.source || '—', false],
-      ['Temperatura', fmtTempSafe(star.teff), false],
-      ['Luminosidad', fmtLumSafe(star.luminosity), false],
-      ['Clase HR', labelClassSafe(star.class), false],
-      star.designation ? ['Designación', star.designation, false] : null,
-      finite(star.distance_ly) ? ['Distancia', `${numSafe(star.distance_ly)} años luz`, false] : null,
-      star.planetCount ? ['Planetas asociados', star.planetCount, false] : null
-    ].filter(Boolean);
+  function renderPagedTab(tab, fields, star) {
+    const perPage = tab === 'resumen' ? 8 : 10;
+    const empty = tab === 'csv'
+      ? 'No hay campos CSV conservados para esta estrella.'
+      : `No hay datos disponibles en esta categoría para ${star.name || 'esta estrella'}.`;
 
-    const note = star.notes ? `<div class="star-empty-tab">${escLocal(star.notes)}</div>` : '';
-    const actions = `<div class="star-card-actions">
-      <a href="https://es.wikipedia.org/wiki/Special:Search?search=${external}" target="_blank" rel="noopener noreferrer" title="Buscar en Wikipedia">Wikipedia</a>
-      <a href="https://www.google.com/search?q=${external}" target="_blank" rel="noopener noreferrer" title="Buscar en Google">Google</a>
-    </div>`;
+    if (!fields.length) return `<div class="star-tab-panel"><div class="star-empty-tab">${escLocal(empty)}</div><div></div></div>`;
 
-    return `<div class="star-tab-panel">${actions}${renderGrid(fields, '', false)}${note}</div>`;
-  }
-
-  function renderCsvTab(fields) {
-    const perPage = 10;
     const pages = Math.max(1, Math.ceil(fields.length / perPage));
-    tabState.rawPage = Math.max(0, Math.min(pages - 1, tabState.rawPage));
-    const start = tabState.rawPage * perPage;
+    const current = Math.max(0, Math.min(pages - 1, Number(tabState.pages[tab] || 0)));
+    tabState.pages[tab] = current;
+    const start = current * perPage;
     const pageFields = fields.slice(start, start + perPage);
-    const grid = renderGrid(pageFields, 'No hay campos CSV conservados para esta estrella.', false);
+    const grid = `<dl class="star-tab-grid">${pageFields.map(([label, value, wide]) => `<div class="star-field${wide ? ' wide' : ''}"><dt>${escLocal(prettyKey(label))}</dt><dd>${escLocal(value)}</dd></div>`).join('')}</dl>`;
 
-    if (pages <= 1) return `<div class="star-tab-panel">${grid}</div>`;
+    const pagination = pages > 1
+      ? `<div class="star-pagination">
+          <button type="button" data-tab-key="${escLocal(tab)}" data-tab-page="${current - 1}" ${current === 0 ? 'disabled' : ''}>Anterior</button>
+          <span>Página ${current + 1} de ${pages} · ${fields.length} datos</span>
+          <button type="button" data-tab-key="${escLocal(tab)}" data-tab-page="${current + 1}" ${current >= pages - 1 ? 'disabled' : ''}>Siguiente</button>
+        </div>`
+      : `<div class="star-pagination"><span>${fields.length} datos</span></div>`;
 
-    return `<div class="star-tab-panel">${grid}<div class="star-pagination">
-      <button type="button" data-raw-page="${tabState.rawPage - 1}" ${tabState.rawPage === 0 ? 'disabled' : ''}>Anterior</button>
-      <span>Página ${tabState.rawPage + 1} de ${pages} · ${fields.length} campos</span>
-      <button type="button" data-raw-page="${tabState.rawPage + 1}" ${tabState.rawPage >= pages - 1 ? 'disabled' : ''}>Siguiente</button>
-    </div></div>`;
+    return `<div class="star-tab-panel">${grid}${pagination}</div>`;
   }
 
-  function renderGrid(fields, emptyText, wrapPanel = true) {
-    if (!fields.length) return `<div class="star-tab-panel"><div class="star-empty-tab">${escLocal(emptyText || 'Sin datos en esta pestaña.')}</div></div>`;
-    const html = `<dl class="star-tab-grid">${fields.map(([label, value, wide]) => `<div class="star-field${wide ? ' wide' : ''}"><dt>${escLocal(prettyKey(label))}</dt><dd>${escLocal(value)}</dd></div>`).join('')}</dl>`;
-    return wrapPanel ? `<div class="star-tab-panel">${html}</div>` : html;
+  function renderExternalSearch(star) {
+    const q = encodeURIComponent(searchName(star));
+    return `<div class="star-tab-panel">
+      <div class="star-search-panel">
+        <a class="star-search-link" href="https://es.wikipedia.org/wiki/Special:Search?search=${q}" target="_blank" rel="noopener noreferrer" title="Buscar en Wikipedia">
+          <span class="star-search-icon" aria-hidden="true">W</span>
+          <span><strong>Wikipedia</strong><small>Buscar artículo o coincidencias enciclopédicas.</small></span>
+        </a>
+        <a class="star-search-link" href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener noreferrer" title="Buscar en Google">
+          <span class="star-search-icon" aria-hidden="true">G</span>
+          <span><strong>Google</strong><small>Buscar referencias externas y páginas astronómicas.</small></span>
+        </a>
+      </div>
+      <div></div>
+    </div>`;
   }
 
   function categorizeFields(star) {
     const raw = getRawFields(star);
-    const used = new Set();
     const take = (keys, source = raw) => keys.map(key => {
       if (source[key] === undefined || source[key] === null || String(source[key]).trim() === '') return null;
-      used.add(key);
       return [key, source[key], isWideValue(source[key])];
     }).filter(Boolean);
 
