@@ -1,5 +1,7 @@
 .data-popover {
-  width: min(380px, calc(100vw - 32px));
+  width: min(620px, calc(100vw - 32px));
+  max-height: none !important;
+  overflow: visible !important;
 }
 
 .data-compact-head {
@@ -15,36 +17,43 @@
 
 .data-action-stack {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 9px 0 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 72px;
+  gap: 10px;
+  margin: 10px 0 10px;
 }
 
 .data-action {
   width: 100%;
-  min-height: 58px;
+  height: 72px;
+  min-height: 72px;
   border: 1px solid var(--line);
-  border-radius: 17px;
+  border-radius: 16px;
   padding: 10px 12px;
   display: grid;
-  align-items: center;
-  justify-items: start;
-  gap: 2px;
-  background: rgba(255,255,255,.045);
+  place-items: center;
+  background: rgba(255,255,255,.04);
   color: var(--ink);
-  text-align: left;
+  text-align: center;
   box-shadow: none;
+  font: inherit;
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
 }
 
 .data-action:hover {
   transform: translateY(-1px);
   border-color: rgba(98,88,255,.52);
-  background: rgba(98,88,255,.12);
+  background: rgba(98,88,255,.10);
 }
 
 .data-action.primary {
   cursor: pointer;
+}
+
+.data-action > span:not(.data-action-icon) {
+  display: grid;
+  place-items: center;
+  gap: 4px;
 }
 
 .data-action-icon {
@@ -59,7 +68,7 @@
 
 .data-action small {
   display: block;
-  margin-top: 4px;
+  margin: 0;
   color: var(--muted);
   font-size: 10.5px;
   line-height: 1.15;
@@ -70,7 +79,7 @@
   padding: 9px 10px;
   border: 1px solid var(--line);
   border-radius: 13px;
-  background: rgba(255,255,255,.035);
+  background: rgba(255,255,255,.03);
 }
 
 .catalog-section-minimal {
@@ -105,6 +114,16 @@
   margin-top: 12px;
   padding-top: 10px;
   border-top: 1px solid var(--line);
+}
+
+.data-schema-minimal[open] {
+  width: 100%;
+}
+
+.data-schema-minimal p {
+  margin: 8px 0 0;
+  columns: 2;
+  column-gap: 22px;
 }
 
 .empty-data-hint {
@@ -157,8 +176,22 @@
 }
 
 @media (max-width: 720px) {
+  .data-popover {
+    width: auto;
+  }
+
   .data-action-stack {
     grid-template-columns: 1fr;
+    grid-auto-rows: 62px;
+  }
+
+  .data-action {
+    height: 62px;
+    min-height: 62px;
+  }
+
+  .data-schema-minimal p {
+    columns: 1;
   }
 
   .empty-data-hint {
