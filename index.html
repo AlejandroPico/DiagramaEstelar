@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="loading-progress.css" />
   <link rel="stylesheet" href="data-panel-refine.css" />
   <link rel="stylesheet" href="star-card-refine.css" />
+  <link rel="stylesheet" href="info-guide.css" />
 </head>
 <body class="dark">
   <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
@@ -25,6 +26,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4.35-4.35"></path></svg>
         </button>
       </div>
+
+      <button id="infoPanelButton" class="toolbar-button" type="button" data-popover-target="infoPopover" aria-label="Información del diagrama" aria-expanded="false" title="Información">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v7"></path><path d="M12 7h.01"></path></svg>
+      </button>
 
       <button id="themeButton" class="toolbar-button" type="button" aria-label="Cambiar modo" title="Modo claro"></button>
 
@@ -42,6 +47,8 @@
     <div id="emptyDataHint" class="empty-data-hint" role="status">
       <p><strong>No hay datos cargados.</strong> Pulsa aquí para importar CSV o cargar catálogos.</p>
     </div>
+
+    <section id="infoPopover" class="toolbar-popover info-popover" aria-label="Información del diagrama HR"></section>
 
     <section id="layersPopover" class="toolbar-popover" aria-label="Capas del diagrama">
       <section class="panel-section">
@@ -62,13 +69,13 @@
       </section>
 
       <section class="data-action-stack" aria-label="Acciones de datos">
-        <label class="data-action primary">
+        <button id="importCsvButton" class="data-action primary" type="button">
           <span><strong>Importar CSV</strong><small>Archivo local</small></span>
-          <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
-        </label>
+        </button>
         <button id="repoCatalogButton" class="data-action" type="button" hidden disabled>
           <span><strong>Cargar repositorio propio</strong><small>Catálogos troceados</small></span>
         </button>
+        <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
       </section>
 
       <p id="dataStatus" class="status-line data-status">Escenario vacío. Carga catálogos cuando quieras.</p>
@@ -132,5 +139,7 @@
   <script src="floating-toolbar.js" defer></script>
   <script src="empty-data-hint.js" defer></script>
   <script src="star-card-refine.js" defer></script>
+  <script src="data-actions.js" defer></script>
+  <script src="info-guide.js" defer></script>
 </body>
 </html>
