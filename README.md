@@ -13,7 +13,8 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Arranque vacío: la página muestra solo fondo, bandas espectrales, cuadrícula, ejes y controles; no carga estrellas ni catálogos.
 - Regiones evolutivas, etiquetas de zonas, nube pedagógica y animación arrancan desactivadas.
 - Burbuja inicial apuntando al botón de datos cuando no hay catálogos cargados.
-- Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
+- Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, información, modo claro/oscuro, datos, capas y zoom.
+- Botón de información con guía científica del diagrama HR, tipos espectrales, evolución estelar, regiones y catálogos.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
 - Panel de datos minimalista con dos acciones principales iguales y centradas: importar CSV y cargar repositorio propio.
@@ -43,6 +44,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── loading-progress.css
 ├── data-panel-refine.css
 ├── star-card-refine.css
+├── info-guide.css
 ├── app.js
 ├── startup-empty-mode.js
 ├── data-importer.js
@@ -54,6 +56,8 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── floating-toolbar.js
 ├── empty-data-hint.js
 ├── star-card-refine.js
+├── data-actions.js
+├── info-guide.js
 ├── tools/
 │   └── split-catalogs.py
 ├── data/
@@ -70,10 +74,25 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 La interfaz principal ya no usa menú hamburguesa visible. Las herramientas viven en una barra flotante situada en la esquina superior derecha:
 
 - **Lupa**: despliega el campo de búsqueda hacia la izquierda.
+- **Información**: abre una guía científica extensa sobre el diagrama de Hertzsprung-Russell.
 - **Luna/Sol**: alterna entre modo oscuro y claro. La app arranca en modo oscuro.
 - **Datos**: abre el panel de catálogos visibles, importación CSV, carga de catálogos del repositorio y ayuda de campos admitidos.
 - **Capas**: abre los interruptores de estrellas cargadas, nube pedagógica, regiones, etiquetas, cuadrícula/ejes y animación.
 - **Zoom**: muestra el porcentaje actual. Al pulsarlo, restablece la vista al 100%.
+
+## Guía informativa
+
+El botón de información abre una ventana enciclopédica organizada por secciones:
+
+- **Qué estás viendo**: explicación general del diagrama HR.
+- **Ejes y escala**: temperatura, luminosidad y lectura espacial del gráfico.
+- **OBAFGKM**: clases espectrales, color y temperatura.
+- **Vida estelar**: nacimiento, fusión nuclear, secuencia principal y destino final.
+- **Regiones**: secuencia principal, subgigantes, gigantes, supergigantes, enanas blancas y franja de inestabilidad.
+- **Cómo leer datos**: interpretación de una estrella concreta.
+- **Catálogos**: procedencia, estimaciones y cautelas científicas.
+
+La guía usa navegación por secciones, contenido desplazable con rueda o gesto táctil y scrollbar oculto.
 
 ## Arranque vacío
 
