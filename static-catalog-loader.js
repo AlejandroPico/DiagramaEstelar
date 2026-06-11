@@ -24,7 +24,7 @@
       const chunkCount = manifest.datasets.reduce((sum, dataset) => sum + (Array.isArray(dataset.chunks) ? dataset.chunks.length : 0), 0);
       button.hidden = false;
       button.disabled = false;
-      button.innerHTML = `<span class="data-action-icon">DB</span><span><strong>Cargar repositorio</strong><small>${manifest.datasets.length} catálogos · ${chunkCount} partes</small></span>`;
+      button.innerHTML = `<span><strong>Cargar repositorio propio</strong><small>${manifest.datasets.length} catálogos · ${chunkCount} partes</small></span>`;
       button.onclick = () => loadStaticCatalogs(manifest);
 
       ui.status.textContent = `Catálogos del repositorio detectados: ${manifest.datasets.length} catálogos / ${chunkCount} partes. Pulsa el botón para cargarlos.`;
