@@ -6,8 +6,9 @@
   <meta name="description" content="Visor interactivo del diagrama de Hertzsprung-Russell." />
   <title>Diagrama Estelar — Hertzsprung-Russell interactivo</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="catalog-layers.css" />
 </head>
-<body>
+<body class="dark">
   <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
     <section id="viewport" class="viewport" aria-label="Escenario del diagrama estelar">
       <canvas id="hrCanvas" class="hr-canvas" aria-label="Diagrama de Hertzsprung-Russell renderizado en Canvas"></canvas>
@@ -43,7 +44,7 @@
 
       <section class="panel-section">
         <h3>Capas</h3>
-        <label class="switch-row"><input id="starsToggle" type="checkbox" checked /> <span>Estrellas de muestra</span></label>
+        <label class="switch-row"><input id="starsToggle" type="checkbox" checked /> <span>Estrellas cargadas</span></label>
         <label class="switch-row"><input id="syntheticToggle" type="checkbox" checked /> <span>Nube pedagógica</span></label>
         <label class="switch-row"><input id="regionsToggle" type="checkbox" checked /> <span>Regiones evolutivas</span></label>
         <label class="switch-row"><input id="labelsToggle" type="checkbox" checked /> <span>Etiquetas de zonas</span></label>
@@ -52,12 +53,19 @@
       </section>
 
       <section class="panel-section">
+        <h3>Catálogos visibles</h3>
+        <div id="catalogLayerList" class="catalog-layer-list">
+          <p class="hint compact">Carga catálogos reales para activar filtros por fuente.</p>
+        </div>
+      </section>
+
+      <section class="panel-section">
         <h3>Color</h3>
         <div class="control-grid">
-          <button id="themeButton" class="action-button">Modo oscuro</button>
+          <button id="themeButton" class="action-button">Modo claro</button>
           <button id="densityButton" class="action-button secondary">Densidad</button>
         </div>
-        <p class="hint">Canvas evita generar miles de nodos DOM. La nube pedagógica simula densidades estelares; no es un catálogo real.</p>
+        <p class="hint">Canvas evita generar miles de nodos DOM. La nube pedagógica se desactiva automáticamente cuando se cargan catálogos grandes.</p>
       </section>
 
       <section class="panel-section">
@@ -108,5 +116,6 @@
   <script src="catalog-loader.js" defer></script>
   <script src="static-catalog-loader.js" defer></script>
   <script src="label-rendering.js" defer></script>
+  <script src="catalog-layer-filter.js" defer></script>
 </body>
 </html>
