@@ -6,16 +6,19 @@ Visualizador interactivo del diagrama de Hertzsprung-Russell preparado para GitH
 
 Crear una página web estática en HTML, CSS y JavaScript para explorar temperatura efectiva, luminosidad, color, clase espectral y regiones evolutivas de las estrellas.
 
-## Primera versión
+## Estado actual
 
 - Renderizado principal en Canvas.
 - Panel lateral tipo hamburguesa.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
+- Zoom mínimo fijado al 100%.
+- Ejes flotantes siempre visibles.
+- Ejes adaptativos con marcas intermedias según el zoom.
 - Zonas clicables: secuencia principal, gigantes, supergigantes, enanas blancas y franja de inestabilidad.
 - Estrellas de muestra clicables.
 - Nube sintética de puntos para validar rendimiento visual.
-- Importación local de CSV.
+- Importación local avanzada de CSV.
 
 ## Estructura
 
@@ -24,20 +27,36 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── index.html
 ├── styles.css
 ├── app.js
-├── data/stars.sample.json
+├── data-importer.js
+├── catalog-loader.js
+├── data/
+│   └── stars.sample.json
 └── README.md
 ```
 
-## CSV admitido
+## Importación de catálogos
 
-Campos recomendados:
+La aplicación acepta uno o varios CSV locales desde el panel lateral. El fichero no se sube a ningún servidor: se procesa en el navegador.
+
+El cargador avanzado reconoce actualmente:
+
+- **NASA Exoplanet Archive**: detecta `hostname`, `st_teff`, `st_lum`, `st_rad`, `st_mass`, `sy_dist`, `sy_pnum`, `pl_name`. La luminosidad `st_lum` se interpreta como log10(L☉) y se convierte a luminosidad lineal.
+- **HYG / ATHYG / HYG-like**: detecta `proper`, `spect`, `ci`, `lum`, `absmag`, `dist`, `hip`, `hd`, `gl`. Si no hay temperatura explícita, estima temperatura desde B−V (`ci`) o clase espectral. Si no hay `lum`, calcula luminosidad desde magnitud absoluta (`absmag`).
+- **CSV de clasificación estelar tipo Kaggle**: detecta `Temperature (K)`, `Luminosity(L/Lo)`, `Radius(R/Ro)`, `Star type`, `Star color`, `Spectral Class`.
+- **CSV HR genéricos / Gaia-like**: reconoce campos como `teff`, `temperature`, `temperature_k`, `effective_temperature`, `teff_gspphot`, `luminosity`, `lum`, `lum_flame`, `radius`, `st_rad`, `mass`, `st_mass`, `sy_dist`.
+
+## Campos recomendados para CSV genérico
 
 ```csv
 name,teff,luminosity,spectral_type,class,distance_ly,mass,radius,source,notes
 Sol,5772,1,G2V,main-sequence,0.0000158,1,1,Muestra,Referencia solar
 ```
 
-También se admiten nombres equivalentes como `temperature`, `st_teff`, `teff_gspphot`, `lum`, `st_lum`, `radius`, `st_rad`, `mass`, `st_mass` y `sy_dist`.
+## Rendimiento
+
+Para catálogos grandes, la importación se ejecuta en un **Web Worker** para evitar bloquear la interfaz principal. Cuando se importan miles de estrellas, la app desactiva automáticamente la nube sintética. Si el catálogo supera decenas de miles de estrellas, también desactiva la animación para evitar redibujos continuos.
+
+El dibujo de grandes volúmenes usa un modo rápido de puntos en Canvas, reservado para catálogos reales densos.
 
 ## Fuentes previstas
 
@@ -48,4 +67,4 @@ También se admiten nombres equivalentes como `temperature`, `st_teff`, `teff_gs
 
 ## Advertencia
 
-La versión actual usa una muestra pedagógica y una nube sintética. No debe tratarse todavía como catálogo científico completo.
+La muestra inicial sigue siendo pedagógica. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
