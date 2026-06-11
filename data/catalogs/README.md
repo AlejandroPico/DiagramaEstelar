@@ -1,17 +1,7 @@
-# Catálogos estáticos
+# Catálogos troceados
 
-Esta carpeta está preparada para alojar catálogos CSV troceados.
+Sube esta carpeta completa dentro de `data/catalogs/`.
 
-## Flujo recomendado
+Cada parte es un CSV independiente con la cabecera repetida y un tamaño inferior a 22 MiB para poder subirse desde la interfaz web de GitHub.
 
-1. Ejecuta desde la raíz del repositorio:
-
-```bash
-python tools/split-catalogs.py "C:/ruta/a/mis_csv" --out data/catalogs --max-mib 22 --clean
-```
-
-2. Sube a GitHub el `manifest.json` generado y las carpetas de partes CSV.
-
-3. La web detectará `data/catalogs/manifest.json` en GitHub Pages y mostrará el botón **Cargar catálogos del repositorio** en el panel de datos.
-
-Cada parte CSV incluye de nuevo la cabecera, por lo que también puede importarse manualmente si hace falta.
+La aplicación lee `manifest.json`, descarga las partes y las combina en el navegador.

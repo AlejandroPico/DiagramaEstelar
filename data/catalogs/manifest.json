@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "generated_by": "ChatGPT",
+  "chunk_size_limit_mib": 22,
+  "datasets": [
+    {
+      "id": "ps-2026-06-10-19-21-45",
+      "label": "PS_2026.06.10_19.21.45",
+      "source_file": "PS_2026.06.10_19.21.45.csv",
+      "original_bytes": 77614532,
+      "chunks": [
+        {
+          "path": "data/catalogs/ps-2026-06-10-19-21-45/part-001.csv",
+          "bytes": 23067017
+        },
+        {
+          "path": "data/catalogs/ps-2026-06-10-19-21-45/part-002.csv",
+          "bytes": 23067198
+        },
+        {
+          "path": "data/catalogs/ps-2026-06-10-19-21-45/part-003.csv",
+          "bytes": 23067058
+        },
+        {
+          "path": "data/catalogs/ps-2026-06-10-19-21-45/part-004.csv",
+          "bytes": 8406863
+        }
+      ],
+      "rows_approx": 39913
+    },
+    {
+      "id": "hyg-v42",
+      "label": "hyg_v42",
+      "source_file": "hyg_v42.csv",
+      "original_bytes": 33932800,
+      "chunks": [
+        {
+          "path": "data/catalogs/hyg-v42/part-001.csv",
+          "bytes": 23068407
+        },
+        {
+          "path": "data/catalogs/hyg-v42/part-002.csv",
+          "bytes": 10864646
+        }
+      ],
+      "rows_approx": 119626
+    },
+    {
+      "id": "hyglike-from-athyg-v32",
+      "label": "hyglike_from_athyg_v32",
+      "source_file": "hyglike_from_athyg_v32.csv",
+      "original_bytes": 36242982,
+      "chunks": [
+        {
+          "path": "data/catalogs/hyglike-from-athyg-v32/part-001.csv",
+          "bytes": 23068593
+        },
+        {
+          "path": "data/catalogs/hyglike-from-athyg-v32/part-002.csv",
+          "bytes": 13174703
+        }
+      ],
+      "rows_approx": 118971
+    },
+    {
+      "id": "6-class-csv",
+      "label": "6 class csv",
+      "source_file": "6 class csv.csv",
+      "original_bytes": 8484,
+      "chunks": [
+        {
+          "path": "data/catalogs/6-class-csv/part-001.csv",
+          "bytes": 8484
+        }
+      ],
+      "rows_approx": 240
+    }
+  ]
+}
