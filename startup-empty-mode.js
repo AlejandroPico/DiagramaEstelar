@@ -30,8 +30,8 @@
       state.density = false;
       state.layers.stars = true;
       state.layers.synthetic = false;
-      state.layers.regions = true;
-      state.layers.labels = true;
+      state.layers.regions = false;
+      state.layers.labels = false;
       state.layers.grid = true;
       state.layers.animation = false;
 
@@ -39,8 +39,8 @@
         if (ui.toggles) {
           if (ui.toggles.stars) ui.toggles.stars.checked = true;
           if (ui.toggles.synthetic) ui.toggles.synthetic.checked = false;
-          if (ui.toggles.regions) ui.toggles.regions.checked = true;
-          if (ui.toggles.labels) ui.toggles.labels.checked = true;
+          if (ui.toggles.regions) ui.toggles.regions.checked = false;
+          if (ui.toggles.labels) ui.toggles.labels.checked = false;
           if (ui.toggles.grid) ui.toggles.grid.checked = true;
           if (ui.toggles.animation) ui.toggles.animation.checked = false;
         }
