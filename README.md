@@ -16,10 +16,12 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
-- Panel de datos minimalista con dos acciones principales: importar CSV y cargar repositorio propio.
-- Ficha de estrella compacta, desplazable, reposicionada para evitar tapar la selección y organizada por pestañas internas.
+- Panel de datos minimalista con dos acciones principales iguales y centradas: importar CSV y cargar repositorio propio.
+- Popover de datos ampliado y sin scroll vertical interno, incluso al desplegar campos admitidos.
+- Ficha de estrella compacta, desplazable, reposicionada para evitar tapar la selección y organizada por pestañas planas.
+- Ficha de tamaño fijo: el contenido se pagina por pestaña para evitar crecimiento, encogimiento o scroll vertical interno.
+- Pestaña **Fuentes** con accesos externos a Wikipedia y Google.
 - Pestaña CSV paginada para acceder a todos los campos conservados sin scroll vertical interno.
-- Enlaces externos de búsqueda en Wikipedia y Google desde la ficha.
 - Pantalla de carga con detalle textual y barra de progreso para catálogos pesados.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
@@ -81,14 +83,15 @@ El objetivo es evitar bloqueos de arranque y dejar que el usuario decida cuándo
 
 ## Ficha de estrella
 
-La ficha se reorganiza en pestañas internas:
+La ficha se reorganiza en pestañas internas planas, sin tarjetas ni burbujas por dato:
 
-- **Resumen**: datos esenciales, fuente y enlaces externos.
+- **Resumen**: datos esenciales.
 - **Identidad**: nombres, claves y designaciones.
 - **Física**: temperatura, luminosidad, radio, masa, color, clase espectral y magnitudes.
 - **Posición**: distancia, coordenadas, movimiento propio y velocidad radial cuando existan.
 - **Catálogo**: metadatos de origen, planetas, banderas y fuentes internas.
 - **CSV**: campos originales conservados, paginados para evitar scroll vertical dentro de la ficha.
+- **Fuentes**: enlaces externos de búsqueda en Wikipedia y Google.
 
 La ficha intenta abrirse en una zona que no tape la estrella seleccionada y también puede arrastrarse manualmente.
 
