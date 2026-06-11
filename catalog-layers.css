@@ -1,0 +1,32 @@
+.catalog-layer-list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.catalog-layer-list .hint.compact {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.catalog-switch span {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.catalog-switch strong {
+  font-size: 0.88rem;
+  line-height: 1.15;
+}
+
+.catalog-switch small {
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.1;
+}
+
+#repoCatalogButton {
+  width: 100%;
+  margin-top: 0.7rem;
+}
