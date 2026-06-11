@@ -10,9 +10,11 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 
 - Renderizado principal en Canvas.
 - Arranque por defecto en modo oscuro para mejorar la lectura de catálogos densos.
+- Arranque ligero: la página no descarga automáticamente los catálogos grandes del repositorio.
 - Barra flotante superior derecha inspirada en Nuclytus/Blockleidos: búsqueda, modo claro/oscuro, datos, capas y zoom.
 - Buscador desplegable hacia la izquierda.
 - Indicador de zoom clicable: al pulsarlo restablece la vista al 100%.
+- Pantalla de carga con detalle textual y barra de progreso para catálogos pesados.
 - Modo claro y oscuro.
 - Zoom, desplazamiento y encaje automático.
 - Zoom mínimo fijado al 100%.
@@ -22,7 +24,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Estrellas de muestra clicables.
 - Nube sintética de puntos para validar rendimiento visual.
 - Importación local avanzada de CSV.
-- Carga automática de catálogos estáticos troceados desde `data/catalogs/manifest.json` cuando existe.
+- Detección de catálogos estáticos troceados desde `data/catalogs/manifest.json` cuando existe.
 - Filtros visuales por catálogo cargado.
 
 ## Estructura
@@ -33,6 +35,7 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── styles.css
 ├── catalog-layers.css
 ├── floating-toolbar.css
+├── loading-progress.css
 ├── app.js
 ├── data-importer.js
 ├── catalog-loader.js
@@ -57,7 +60,7 @@ La interfaz principal ya no usa menú hamburguesa visible. Las herramientas vive
 
 - **Lupa**: despliega el campo de búsqueda hacia la izquierda.
 - **Luna/Sol**: alterna entre modo oscuro y claro. La app arranca en modo oscuro.
-- **Datos**: abre el panel de catálogos visibles, importación CSV, recarga de catálogos del repositorio y ayuda de campos admitidos.
+- **Datos**: abre el panel de catálogos visibles, importación CSV, carga de catálogos del repositorio y ayuda de campos admitidos.
 - **Capas**: abre los interruptores de estrellas cargadas, nube pedagógica, regiones, etiquetas, cuadrícula/ejes y animación.
 - **Zoom**: muestra el porcentaje actual. Al pulsarlo, restablece la vista al 100%.
 
@@ -96,7 +99,9 @@ data/catalogs/
 └── ...
 ```
 
-Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web descarga automáticamente las partes, recompone cada catálogo como unidad lógica y muestra los filtros de catálogo.
+Cada parte mantiene la cabecera CSV y queda por debajo de 22 MiB. Cuando `manifest.json` existe en GitHub Pages, la web muestra el botón **Cargar catálogos del repositorio** dentro del panel de datos. La descarga ya no es automática para evitar bloqueos de arranque.
+
+Durante la carga manual, la pantalla de carga muestra qué parte se está descargando y una barra de progreso. Al terminar la descarga, el navegador procesa los catálogos en memoria mediante Web Worker.
 
 ## Filtros por catálogo
 
