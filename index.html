@@ -72,12 +72,14 @@
         <h3>Datos</h3>
         <label class="file-button">
           Importar CSV local
-          <input id="csvInput" type="file" accept=".csv,text/csv" hidden />
+          <input id="csvInput" type="file" accept=".csv,text/csv" multiple hidden />
         </label>
         <p id="dataStatus" class="status-line">Cargando muestra local…</p>
         <details class="schema-details">
-          <summary>Campos CSV admitidos</summary>
-          <p><code>name</code>, <code>teff</code>/<code>temperature</code>, <code>luminosity</code>/<code>lum</code>, <code>spectral_type</code>, <code>class</code>, <code>distance_ly</code>, <code>mass</code>, <code>radius</code>, <code>source</code>, <code>notes</code>.</p>
+          <summary>Catálogos y campos admitidos</summary>
+          <p>Importador avanzado para <strong>NASA Exoplanet Archive</strong>, <strong>HYG/ATHYG</strong>, CSV de clasificación estelar tipo Kaggle/Gaia-like y CSV HR genéricos.</p>
+          <p>Campos directos: <code>teff</code>, <code>temperature</code>, <code>temperature_k</code>, <code>st_teff</code>, <code>teff_gspphot</code>, <code>luminosity</code>, <code>lum</code>, <code>st_lum</code>, <code>lum_flame</code>, <code>radius</code>, <code>st_rad</code>, <code>mass</code>, <code>st_mass</code>.</p>
+          <p>HYG/ATHYG: si no existe temperatura explícita, se estima desde <code>ci</code> B−V o <code>spect</code>; si falta <code>lum</code>, se calcula desde <code>absmag</code>.</p>
         </details>
       </section>
     </aside>
@@ -101,5 +103,6 @@
     </div>
   </main>
   <script src="app.js" defer></script>
+  <script src="data-importer.js" defer></script>
 </body>
 </html>
