@@ -4,13 +4,26 @@
   if (typeof drawWorldClipped !== 'function' || typeof ctx === 'undefined') return;
   if (typeof tempX !== 'function' || typeof lumY !== 'function') return;
 
-  const originalDrawWorldClipped = drawWorldClipped;
-  const originalBind = typeof bind === 'function' ? bind : null;
+  const toggles = {
+    uncertainty: document.getElementById('uncertaintyToggle'),
+    radiusCurves: document.getElementById('radiusCurvesToggle'),
+    isochrones: document.getElementById('isochronesToggle'),
+    evolutionTracks: document.getElementById('evolutionTracksToggle')
+  };
 
   state.layers.uncertainty = false;
   state.layers.radiusCurves = false;
   state.layers.isochrones = false;
   state.layers.evolutionTracks = false;
+
+  Object.entries(toggles).forEach(([key, input]) => {
+    if (!input) return;
+    input.checked = Boolean(state.layers[key]);
+    input.onchange = () => {
+      state.layers[key] = input.checked;
+      draw();
+    };
+  });
 
   drawWorldClipped = function drawWorldWithScientificOverlays() {
     const a = chart.axis;
