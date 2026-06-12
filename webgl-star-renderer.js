@@ -1,6 +1,43 @@
 'use strict';
 
 (() => {
+  const VERTEX_SHADER = `
+    attribute vec2 a_pos;
+    attribute vec3 a_color;
+    attribute float a_size;
+    uniform vec2 u_resolution;
+    uniform vec2 u_translate;
+    uniform float u_scale;
+    uniform float u_dpr;
+    varying vec3 v_color;
+    varying float v_alpha;
+    void main() {
+      vec2 screen = a_pos * u_scale + u_translate;
+      vec2 zeroToOne = screen / u_resolution;
+      vec2 clip = zeroToOne * 2.0 - 1.0;
+      gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
+      gl_PointSize = max(2.0, a_size * 2.25 * u_dpr);
+      v_color = a_color;
+      v_alpha = 1.0;
+    }
+  `;
+
+  const FRAGMENT_SHADER = `
+    precision mediump float;
+    varying vec3 v_color;
+    varying float v_alpha;
+    uniform float u_alpha;
+    void main() {
+      vec2 uv = gl_PointCoord.xy * 2.0 - 1.0;
+      float d = dot(uv, uv);
+      if (d > 1.0) discard;
+      float core = smoothstep(1.0, 0.10, d);
+      float glow = smoothstep(1.0, 0.0, d) * 0.28;
+      float a = clamp(core * 0.86 + glow, 0.0, 1.0) * u_alpha * v_alpha;
+      gl_FragColor = vec4(v_color, a);
+    }
+  `;
+
   if (typeof canvas === 'undefined' || typeof viewport === 'undefined' || typeof state === 'undefined' || typeof chart === 'undefined') return;
   if (typeof tempX !== 'function' || typeof lumY !== 'function') return;
 
@@ -28,7 +65,16 @@
     return;
   }
 
-  const engine = createEngine(gl, glCanvas);
+  let engine;
+  try {
+    engine = createEngine(gl, glCanvas);
+  } catch (error) {
+    console.warn('WebGL experimental desactivado:', error);
+    glCanvas.remove();
+    return;
+  }
+
+  document.body.classList.add('webgl-stars-active');
   window.__HR_WEBGL_RENDERER__ = engine;
 
   draw = function drawWithWebGLStars() {
@@ -70,7 +116,6 @@
 
   function createEngine(gl, canvasEl) {
     const program = createProgram(gl, VERTEX_SHADER, FRAGMENT_SHADER);
-    const ext = gl.getExtension('OES_standard_derivatives');
     gl.useProgram(program);
 
     const locations = {
@@ -227,41 +272,4 @@
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader) || 'No se pudo compilar WebGL.');
     return shader;
   }
-
-  const VERTEX_SHADER = `
-    attribute vec2 a_pos;
-    attribute vec3 a_color;
-    attribute float a_size;
-    uniform vec2 u_resolution;
-    uniform vec2 u_translate;
-    uniform float u_scale;
-    uniform float u_dpr;
-    varying vec3 v_color;
-    varying float v_alpha;
-    void main() {
-      vec2 screen = a_pos * u_scale + u_translate;
-      vec2 zeroToOne = screen / u_resolution;
-      vec2 clip = zeroToOne * 2.0 - 1.0;
-      gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
-      gl_PointSize = max(2.0, a_size * 2.25 * u_dpr);
-      v_color = a_color;
-      v_alpha = 1.0;
-    }
-  `;
-
-  const FRAGMENT_SHADER = `
-    precision mediump float;
-    varying vec3 v_color;
-    varying float v_alpha;
-    uniform float u_alpha;
-    void main() {
-      vec2 uv = gl_PointCoord.xy * 2.0 - 1.0;
-      float d = dot(uv, uv);
-      if (d > 1.0) discard;
-      float core = smoothstep(1.0, 0.10, d);
-      float glow = smoothstep(1.0, 0.0, d) * 0.28;
-      float a = clamp(core * 0.86 + glow, 0.0, 1.0) * u_alpha * v_alpha;
-      gl_FragColor = vec4(v_color, a);
-    }
-  `;
 })();
