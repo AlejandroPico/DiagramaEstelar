@@ -1,0 +1,29 @@
+.empty-data-hint {
+  right: 180px;
+}
+
+@media (max-width: 980px) {
+  .empty-data-hint {
+    right: auto;
+    left: max(10px, env(safe-area-inset-left));
+    width: min(300px, calc(100vw - 20px));
+  }
+
+  .empty-data-hint::before {
+    left: 178px;
+    right: auto;
+  }
+}
+
+@media (max-width: 540px) {
+  .empty-data-hint {
+    left: max(8px, env(safe-area-inset-left));
+    right: max(8px, env(safe-area-inset-right));
+    width: auto;
+  }
+
+  .empty-data-hint::before {
+    left: 176px;
+    right: auto;
+  }
+}
