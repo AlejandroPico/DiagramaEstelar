@@ -6,7 +6,7 @@ Visualizador interactivo del diagrama de Hertzsprung-Russell preparado para GitH
 
 La rama `beta` se usa como laboratorio de mejoras experimentales antes de llevarlas a `main`.
 
-En esta rama se ha añadido un **motor WebGL experimental para estrellas**, pensado para comparar rendimiento frente al renderizado Canvas 2D cuando se cargan catálogos grandes.
+En esta rama se han añadido un **motor WebGL experimental para estrellas**, un panel de **filtros científicos avanzados**, enlaces externos ampliados y capas visuales de incertidumbre, radios constantes, isocronas y trayectorias evolutivas.
 
 ## Objetivo
 
@@ -16,6 +16,10 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 
 - Renderizado base en Canvas 2D para fondo, cuadrícula, ejes, regiones, etiquetas y textos.
 - Renderizado experimental WebGL para puntos estelares en la rama `beta`.
+- Botón de filtros con icono de embudo entre Datos y Capas.
+- Filtros por temperatura, luminosidad, magnitud absoluta aproximada, radio, masa, distancia, planetas, B−V y tipo espectral.
+- Capas científicas opcionales: incertidumbre, radios constantes, isocronas y trayectorias evolutivas.
+- Ficha de estrella con pestaña Fuentes ampliada: Wikipedia, SIMBAD, VizieR, NASA Exoplanet Archive, Gaia Archive cuando hay identificador, NASA ADS, arXiv y Google.
 - Arranque por defecto en modo oscuro.
 - Arranque vacío: la página muestra fondo, degradado espectral continuo, cuadrícula, cuatro ejes y controles; no carga estrellas ni catálogos hasta que el usuario lo pide.
 - Esquema de cuatro ejes: luminosidad izquierda, magnitud absoluta derecha, tipo espectral arriba y color B−V abajo.
@@ -24,11 +28,10 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 - Nombres de zonas estabilizados durante el zoom mediante una capa de pantalla fija.
 - Hit-test geométrico propio para que la interacción con zonas coincida con la forma visible.
 - Ficha moderna para estrellas y zonas evolutivas, con pestañas planas y contenido paginado.
-- Barra flotante superior con búsqueda, información, modo claro/oscuro, datos, capas y zoom.
+- Barra flotante superior con búsqueda, información, modo claro/oscuro, datos, filtros, capas y zoom.
 - Panel de información con título simplificado: **Diagrama de Hertzsprung-Russell**.
 - Guía científica ampliada a 20 capítulos, con tablas y enlaces externos de apoyo.
-- Diseño responsive para tablet y móvil mediante `mobile-responsive.css`.
-- En móvil, el índice de la guía se abre con un botón **Temas** para dejar el máximo ancho posible al contenido.
+- Diseño responsive para tablet y móvil mediante `mobile-responsive.css` y ajuste específico `beta-toolbar-fixes.css`.
 - Favicon SVG propio del proyecto.
 - Zoom máximo ampliado al 7000% mediante `zoom-boost.js`.
 - Panel de datos con importación local CSV y carga manual de catálogos estáticos troceados.
@@ -50,14 +53,20 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── info-guide.css
 ├── visibility-fixes.css
 ├── mobile-responsive.css
+├── beta-toolbar-fixes.css
 ├── webgl-renderer.css
+├── advanced-filters.css
+├── scientific-overlays.css
 ├── favicon.svg
 ├── app.js
 ├── zoom-boost.js
 ├── hr-four-axis-overlay.js
 ├── evolutionary-regions-polish.js
 ├── region-label-stabilizer.js
+├── scientific-overlays.js
 ├── webgl-star-renderer.js
+├── advanced-filters.js
+├── external-sources-enhanced.js
 ├── startup-empty-mode.js
 ├── data-importer.js
 ├── catalog-loader.js
@@ -99,6 +108,52 @@ Características:
 
 Limitación actual: el renderizado de puntos se acelera, pero la búsqueda de estrella cercana con el ratón sigue usando el método CPU original. Una mejora posterior será añadir índice espacial o quadtree.
 
+## Filtros científicos
+
+`advanced-filters.js` añade un panel de filtros accesible desde el botón de embudo.
+
+Filtros disponibles:
+
+- Temperatura efectiva.
+- Luminosidad.
+- Magnitud absoluta aproximada.
+- Radio.
+- Masa.
+- Distancia.
+- Número de planetas conocidos.
+- Color B−V.
+- Tipo espectral.
+
+Los filtros numéricos usan barras de doble extremo para acotar mínimo y máximo. El filtrado se integra con los filtros por catálogo: primero se respeta la fuente visible y después se acota el conjunto por criterios físicos.
+
+## Capas científicas
+
+`scientific-overlays.js` añade cuatro capas opcionales al panel Capas:
+
+- **Incertidumbre**: dibuja elipses cuando el catálogo aporta errores de temperatura o luminosidad; si falta uno de los ejes, usa una estimación visual suave.
+- **Radios constantes**: curvas de radio estelar aproximado basadas en la relación entre luminosidad, temperatura y radio.
+- **Isocronas**: curvas pedagógicas de edad aproximada, útiles para explicar cúmulos y población estelar.
+- **Trayectorias evolutivas**: recorridos esquemáticos para estrellas de distinta masa inicial.
+
+Estas capas son ayudas visuales; no sustituyen modelos astrofísicos formales ni tablas de evolución profesional.
+
+## Fuentes externas ampliadas
+
+`external-sources-enhanced.js` amplía la pestaña **Fuentes** de la ficha de estrella.
+
+Incluye accesos a:
+
+- Wikipedia.
+- SIMBAD.
+- VizieR.
+- NASA Exoplanet Archive.
+- Gaia Archive cuando se detecta identificador Gaia.
+- NASA ADS.
+- arXiv.
+- Google.
+
+Los enlaces usan el mejor identificador disponible: `hostname`, nombre de estrella, designación, HD, HIP, Gaia DR3 o clave del catálogo.
+
 ## Interfaz
 
 La interfaz principal usa una barra flotante situada en la esquina superior derecha en escritorio y adaptada a la parte superior en pantallas pequeñas.
@@ -107,7 +162,8 @@ La interfaz principal usa una barra flotante situada en la esquina superior dere
 - **Información**: abre la guía del diagrama de Hertzsprung-Russell.
 - **Luna/Sol**: alterna entre modo oscuro y claro.
 - **Datos**: abre el panel de importación CSV, carga de catálogos y filtros por fuente.
-- **Capas**: permite activar estrellas cargadas, zonas evolutivas, nombres de zonas, cuadrícula/ejes y animación.
+- **Filtros**: abre el panel de filtros científicos avanzados.
+- **Capas**: permite activar estrellas cargadas, zonas evolutivas, nombres de zonas, cuadrícula/ejes, animación y capas científicas.
 - **Zoom**: muestra el porcentaje actual y permite restablecer la vista.
 
 ## Diseño móvil y tablet
@@ -206,4 +262,4 @@ En la rama `beta`, los puntos estelares se dibujan mediante WebGL. Esta mejora r
 
 ## Advertencia
 
-La pantalla inicial no representa un catálogo científico; es un escenario HR vacío preparado para cargar datos. Las zonas evolutivas son orientativas y no constituyen fronteras observacionales exactas. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
+La pantalla inicial no representa un catálogo científico; es un escenario HR vacío preparado para cargar datos. Las zonas evolutivas, isocronas y trayectorias son orientativas y no constituyen fronteras observacionales exactas. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
