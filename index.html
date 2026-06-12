@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="visibility-fixes.css" />
   <link rel="stylesheet" href="mobile-responsive.css" />
   <link rel="stylesheet" href="webgl-renderer.css" />
+  <link rel="stylesheet" href="advanced-filters.css" />
+  <link rel="stylesheet" href="scientific-overlays.css" />
 </head>
 <body class="dark">
   <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
@@ -41,6 +43,10 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="7" ry="3"></ellipse><path d="M5 5v6c0 1.66 3.13 3 7 3s7-1.34 7-3V5"></path><path d="M5 11v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6"></path></svg>
       </button>
 
+      <button id="filtersPanelButton" class="toolbar-button" type="button" data-popover-target="filtersPopover" aria-label="Filtros" aria-expanded="false" title="Filtros">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16l-6.2 7.1v4.7l-3.6 2.1v-6.8L4 5Z"></path></svg>
+      </button>
+
       <button id="layersPanelButton" class="toolbar-button" type="button" data-popover-target="layersPopover" aria-label="Capas" aria-expanded="false" title="Capas">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4-8 4-8-4 8-4Z"></path><path d="m4 12 8 4 8-4"></path><path d="m4 17 8 4 8-4"></path></svg>
       </button>
@@ -63,8 +69,15 @@
         <label class="switch-row"><input id="labelsToggle" type="checkbox" /> <span>Nombres de zonas</span></label>
         <label class="switch-row"><input id="gridToggle" type="checkbox" checked /> <span>Cuadrícula y ejes</span></label>
         <label class="switch-row"><input id="animationToggle" type="checkbox" /> <span>Animación suave</span></label>
+        <label class="switch-row"><input id="uncertaintyToggle" type="checkbox" /> <span>Incertidumbre</span></label>
+        <label class="switch-row"><input id="radiusCurvesToggle" type="checkbox" /> <span>Radios constantes</span></label>
+        <label class="switch-row"><input id="isochronesToggle" type="checkbox" /> <span>Isocronas</span></label>
+        <label class="switch-row"><input id="evolutionTracksToggle" type="checkbox" /> <span>Trayectorias evolutivas</span></label>
+        <p class="scientific-overlay-note">Las capas de radios, isocronas y trayectorias son guías pedagógicas. No sustituyen modelos astrofísicos completos.</p>
       </section>
     </section>
+
+    <section id="filtersPopover" class="toolbar-popover filter-popover" aria-label="Filtros científicos"></section>
 
     <section id="dataPopover" class="toolbar-popover data-popover" aria-label="Datos y catálogos">
       <section class="panel-section data-compact-head">
@@ -139,15 +152,18 @@
   <script src="hr-four-axis-overlay.js" defer></script>
   <script src="evolutionary-regions-polish.js" defer></script>
   <script src="region-label-stabilizer.js" defer></script>
+  <script src="scientific-overlays.js" defer></script>
   <script src="data-importer.js" defer></script>
   <script src="catalog-loader.js" defer></script>
   <script src="catalog-loader-enhanced.js" defer></script>
   <script src="static-catalog-loader.js" defer></script>
   <script src="label-rendering.js" defer></script>
   <script src="catalog-layer-filter.js" defer></script>
+  <script src="advanced-filters.js" defer></script>
   <script src="floating-toolbar.js" defer></script>
   <script src="empty-data-hint.js" defer></script>
   <script src="star-card-refine.js" defer></script>
+  <script src="external-sources-enhanced.js" defer></script>
   <script src="region-card-refine.js" defer></script>
   <script src="data-actions.js" defer></script>
   <script src="info-guide.js" defer></script>
