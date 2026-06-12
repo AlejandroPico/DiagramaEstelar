@@ -2,13 +2,20 @@
 
 Visualizador interactivo del diagrama de Hertzsprung-Russell preparado para GitHub Pages.
 
+## Rama beta
+
+La rama `beta` se usa como laboratorio de mejoras experimentales antes de llevarlas a `main`.
+
+En esta rama se ha añadido un **motor WebGL experimental para estrellas**, pensado para comparar rendimiento frente al renderizado Canvas 2D cuando se cargan catálogos grandes.
+
 ## Objetivo
 
 Crear una página web estática en HTML, CSS y JavaScript para explorar temperatura efectiva, luminosidad, color, clase espectral, color B−V, magnitud absoluta aproximada, catálogos estelares y zonas evolutivas.
 
 ## Estado actual
 
-- Renderizado principal en Canvas.
+- Renderizado base en Canvas 2D para fondo, cuadrícula, ejes, regiones, etiquetas y textos.
+- Renderizado experimental WebGL para puntos estelares en la rama `beta`.
 - Arranque por defecto en modo oscuro.
 - Arranque vacío: la página muestra fondo, degradado espectral continuo, cuadrícula, cuatro ejes y controles; no carga estrellas ni catálogos hasta que el usuario lo pide.
 - Esquema de cuatro ejes: luminosidad izquierda, magnitud absoluta derecha, tipo espectral arriba y color B−V abajo.
@@ -43,12 +50,14 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 ├── info-guide.css
 ├── visibility-fixes.css
 ├── mobile-responsive.css
+├── webgl-renderer.css
 ├── favicon.svg
 ├── app.js
 ├── zoom-boost.js
 ├── hr-four-axis-overlay.js
 ├── evolutionary-regions-polish.js
 ├── region-label-stabilizer.js
+├── webgl-star-renderer.js
 ├── startup-empty-mode.js
 ├── data-importer.js
 ├── catalog-loader.js
@@ -74,6 +83,21 @@ Crear una página web estática en HTML, CSS y JavaScript para explorar temperat
 │   └── stars.sample.json
 └── README.md
 ```
+
+## Motor WebGL experimental
+
+`webgl-star-renderer.js` crea un segundo canvas transparente sobre el escenario principal y usa WebGL para dibujar los puntos estelares.
+
+Características:
+
+- Usa la GPU para dibujar todos los puntos con `gl.POINTS`.
+- Mantiene Canvas 2D para ejes, regiones, textos, fichas y compatibilidad.
+- Reconstruye el buffer de vértices cuando cambia `state.stars`.
+- Usa `scissor` para recortar el render al área interna del diagrama.
+- Mantiene una sobrecapa Canvas 2D para resaltar la estrella seleccionada o bajo el cursor.
+- Si WebGL no está disponible o falla la compilación de shaders, el sistema vuelve al renderizado Canvas original.
+
+Limitación actual: el renderizado de puntos se acelera, pero la búsqueda de estrella cercana con el ratón sigue usando el método CPU original. Una mejora posterior será añadir índice espacial o quadtree.
 
 ## Interfaz
 
@@ -178,7 +202,7 @@ El script genera `data/catalogs/manifest.json` y partes CSV por catálogo. Cuand
 
 Para catálogos grandes, la importación se ejecuta en un **Web Worker**. Cuando se importan miles de estrellas, la app desactiva automáticamente la nube sintética. Si el catálogo supera decenas de miles de estrellas, también desactiva la animación para evitar redibujos continuos.
 
-El dibujo de grandes volúmenes usa un modo rápido de puntos en Canvas, reservado para catálogos reales densos.
+En la rama `beta`, los puntos estelares se dibujan mediante WebGL. Esta mejora reduce el coste de dibujo de catálogos grandes, pero todavía no sustituye la lógica de búsqueda/hover CPU. El siguiente paso técnico para grandes catálogos es añadir selección inteligente o índice espacial.
 
 ## Advertencia
 
