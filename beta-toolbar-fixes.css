@@ -1,0 +1,15 @@
+@media (max-width: 980px) {
+  .floating-toolbar {
+    grid-template-columns: auto 42px 42px 42px 42px 42px auto;
+  }
+}
+
+@media (max-width: 540px) {
+  .floating-toolbar {
+    grid-template-columns: 42px 42px 42px 42px 42px 42px 1fr;
+  }
+
+  #filtersPanelButton { order: 5; }
+  #layersPanelButton { order: 6; }
+  #zoomValue { order: 7; }
+}
