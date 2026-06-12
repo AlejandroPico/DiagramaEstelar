@@ -9,9 +9,7 @@
     <article class="info-guide" aria-label="Guía del diagrama de Hertzsprung-Russell">
       <header class="info-guide-head">
         <div>
-          <p class="eyebrow">Diagrama de Hertzsprung-Russell</p>
-          <h2>Leer el diagrama HR</h2>
-          <p>De una primera lectura visual a una comprensión física completa del mapa estelar.</p>
+          <h2>Diagrama de Hertzsprung-Russell</h2>
         </div>
         <button id="infoGuideClose" class="info-guide-close" type="button" aria-label="Cerrar guía">×</button>
       </header>
