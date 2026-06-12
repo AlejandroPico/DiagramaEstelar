@@ -171,7 +171,7 @@
   function renderSpectralFilter() {
     const selected = state.advancedFilters.spectral || {};
     return `<article class="filter-card spectral-filter-card">
-      <header><h4>Tipo espectral</h4><span class="filter-range-readout">Primer filtro</span></header>
+      <header><h4>Tipo espectral</h4></header>
       <div class="filter-check-grid spectral-compact">
         ${SPECTRAL.map(type => `<label class="filter-check"><input type="checkbox" data-spectral-filter="${type}" ${selected[type] !== false ? 'checked' : ''}/> ${type}</label>`).join('')}
       </div>
@@ -192,12 +192,12 @@
       if (input === minInput) b = a;
       else a = b;
     }
-    minInput.value = a;
-    maxInput.value = b;
     const min = decodeValue(filter, a);
     const max = decodeValue(filter, b);
-    state.advancedFilters.ranges[key] = { min, max };
-    updateCardVisual(card, filter, stat, min, max);
+    const normalized = normalizeRange(filter, stat, min, max);
+    syncRangeInputs(card, filter, stat, normalized.min, normalized.max);
+    updateCardVisual(card, filter, stat, normalized.min, normalized.max);
+    setOrClearRange(filter.key, filter, stat, normalized.min, normalized.max);
     invalidateFiltered();
     scheduleApply(APPLY_DELAY_MS, true);
   }
@@ -221,18 +221,29 @@
 
     if (!Number.isFinite(min)) min = stat.min;
     if (!Number.isFinite(max)) max = stat.max;
+    const normalized = normalizeRange(filter, stat, min, max, input === minText ? 'min' : 'max');
+    syncRangeInputs(card, filter, stat, normalized.min, normalized.max);
+    updateCardVisual(card, filter, stat, normalized.min, normalized.max);
+    setOrClearRange(key, filter, stat, normalized.min, normalized.max);
+    invalidateFiltered();
+    scheduleApply(0, true);
+  }
+
+  function normalizeRange(filter, stat, min, max, source = '') {
     min = clamp(min, stat.min, stat.max);
     max = clamp(max, stat.min, stat.max);
     if (min > max) {
-      if (input === minText) max = min;
+      if (source === 'min') max = min;
       else min = max;
     }
+    if (isNearLower(filter, stat, min)) min = stat.min;
+    if (isNearUpper(filter, stat, max)) max = stat.max;
+    return { min, max };
+  }
 
-    state.advancedFilters.ranges[key] = { min, max };
-    syncRangeInputs(card, filter, stat, min, max);
-    updateCardVisual(card, filter, stat, min, max);
-    invalidateFiltered();
-    scheduleApply(0, true);
+  function setOrClearRange(key, filter, stat, min, max) {
+    if (isFullRange(filter, stat, min, max)) delete state.advancedFilters.ranges[key];
+    else state.advancedFilters.ranges[key] = { min, max };
   }
 
   function updateCardVisual(card, filter, stat, min, max) {
@@ -307,9 +318,10 @@
   function hasActiveFilters(stars) {
     const stats = collectFilterStats(stars);
     const rangeActive = Object.entries(state.advancedFilters.ranges || {}).some(([key, range]) => {
+      const filter = FILTERS.find(item => item.key === key);
       const stat = stats[key];
-      if (!stat || !range) return false;
-      return range.min > stat.min || range.max < stat.max;
+      if (!filter || !stat || !range) return false;
+      return !isFullRange(filter, stat, range.min, range.max);
     });
     const spectral = state.advancedFilters.spectral || {};
     const spectralActive = SPECTRAL.some(type => spectral[type] === false);
@@ -339,17 +351,17 @@
 
   function normalizedCurrentRange(filter, stat) {
     const current = state.advancedFilters.ranges[filter.key] || { min: stat.min, max: stat.max };
-    const min = clamp(Number(current.min), stat.min, stat.max);
-    const max = clamp(Number(current.max), stat.min, stat.max);
-    if (min > max) return { min: max, max: min };
-    return { min, max };
+    return normalizeRange(filter, stat, Number(current.min), Number(current.max));
   }
 
   function resetRangesOutsideStats() {
     const stats = collectFilterStats(state.stars || []);
     Object.keys(state.advancedFilters.ranges || {}).forEach(key => {
+      const filter = FILTERS.find(item => item.key === key);
       const stat = stats[key];
-      if (!stat) delete state.advancedFilters.ranges[key];
+      const range = state.advancedFilters.ranges[key];
+      if (!filter || !stat || !range) delete state.advancedFilters.ranges[key];
+      else if (isFullRange(filter, stat, range.min, range.max)) delete state.advancedFilters.ranges[key];
     });
   }
 
@@ -357,8 +369,9 @@
     const stats = collectFilterStats(state.stars || []);
     let count = 0;
     Object.entries(state.advancedFilters.ranges || {}).forEach(([key, range]) => {
+      const filter = FILTERS.find(item => item.key === key);
       const stat = stats[key];
-      if (stat && (range.min > stat.min || range.max < stat.max)) count++;
+      if (filter && stat && range && !isFullRange(filter, stat, range.min, range.max)) count++;
     });
     const spectral = state.advancedFilters.spectral || {};
     if (SPECTRAL.some(type => spectral[type] === false)) count++;
@@ -387,8 +400,31 @@
     return filter.scale === 'log' ? 10 ** value : value;
   }
 
+  function isFullRange(filter, stat, min, max) {
+    return isNearLower(filter, stat, min) && isNearUpper(filter, stat, max);
+  }
+
+  function isNearLower(filter, stat, value) {
+    return Math.abs(encodeValue(filter, value) - encodeValue(filter, stat.min)) <= filterTolerance(filter, stat);
+  }
+
+  function isNearUpper(filter, stat, value) {
+    return Math.abs(encodeValue(filter, value) - encodeValue(filter, stat.max)) <= filterTolerance(filter, stat);
+  }
+
+  function filterTolerance(filter, stat) {
+    const encoded = encodeRange(filter, stat);
+    return Math.max(Math.abs(encoded.step) * 1.5, Math.abs(encoded.max - encoded.min) * 0.0008, 1e-9);
+  }
+
   function filterSignature(stars) {
-    const ranges = Object.entries(state.advancedFilters.ranges || {}).map(([k, v]) => `${k}:${v.min}:${v.max}`).join('|');
+    const stats = collectFilterStats(stars);
+    const ranges = Object.entries(state.advancedFilters.ranges || {}).map(([k, v]) => {
+      const filter = FILTERS.find(item => item.key === k);
+      const stat = stats[k];
+      if (!filter || !stat || isFullRange(filter, stat, v.min, v.max)) return '';
+      return `${k}:${v.min}:${v.max}`;
+    }).filter(Boolean).join('|');
     const spectral = SPECTRAL.map(k => `${k}:${state.advancedFilters.spectral?.[k] !== false ? 1 : 0}`).join('|');
     return `${stars.length}|${ranges}|${spectral}`;
   }
