@@ -6,6 +6,10 @@
   const dataPopover = document.getElementById('dataPopover');
   if (!hint || !dataButton || !dataPopover) return;
 
+  const anchorStyle = document.createElement('style');
+  anchorStyle.textContent = '.empty-data-hint::before{right:var(--hint-arrow-right,19px)!important;left:var(--hint-arrow-left,auto)!important;}';
+  document.head.appendChild(anchorStyle);
+
   let dismissed = false;
 
   function shouldShow() {
