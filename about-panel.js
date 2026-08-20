@@ -1,6 +1,11 @@
 'use strict';
 
 (() => {
+  const finalStyle = document.createElement('link');
+  finalStyle.rel = 'stylesheet';
+  finalStyle.href = 'square-edges-final.css';
+  document.head.appendChild(finalStyle);
+
   const button = document.getElementById('aboutPanelButton');
   if (!button) return;
 
@@ -72,8 +77,7 @@
   });
 
   function open() {
-    document.querySelectorAll('.toolbar-popover.open').forEach(panel => panel.classList.remove('open'));
-    document.querySelectorAll('.toolbar-button.active').forEach(item => item.classList.remove('active'));
+    window.dispatchEvent(new CustomEvent('hr-close-toolbar'));
     host.classList.add('open');
     host.setAttribute('aria-hidden', 'false');
     button.classList.add('active');
