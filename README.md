@@ -1,119 +1,130 @@
-# DiagramaEstelar
+# Diagrama Estelar
 
-Visualizador interactivo del diagrama de Hertzsprung-Russell preparado para GitHub Pages.
+**Versión 1.0 · Hertzsprung–Russell interactivo**
 
-## Rama beta
+Diagrama Estelar es un visualizador web interactivo del **diagrama de Hertzsprung–Russell (HR)** orientado a la exploración de catálogos estelares, la lectura visual de propiedades físicas y la divulgación astronómica.
 
-La rama `beta` se usa como laboratorio de mejoras experimentales antes de llevarlas a `main`.
+La aplicación funciona completamente en el navegador y está preparada para GitHub Pages. Puede arrancar sin datos, importar CSV locales y cargar catálogos estáticos troceados desde el propio repositorio.
 
-En esta rama se han añadido un **motor WebGL experimental para estrellas**, un panel de **filtros científicos avanzados**, enlaces externos ampliados y capas visuales de incertidumbre, radios constantes, isocronas y trayectorias evolutivas.
+> La rama `beta` contiene la versión 1.0 preparada para validación antes de su integración definitiva en `main`.
 
-## Objetivo
+---
 
-Crear una página web estática en HTML, CSS y JavaScript para explorar temperatura efectiva, luminosidad, color, clase espectral, color B−V, magnitud absoluta aproximada, catálogos estelares y zonas evolutivas.
+## Características principales
 
-## Estado actual
+### Diagrama HR interactivo
 
-- Renderizado base en Canvas 2D para fondo, cuadrícula, ejes, regiones, etiquetas y textos.
-- Renderizado experimental WebGL para puntos estelares en la rama `beta`.
-- Botón de filtros con icono de embudo entre Datos y Capas.
-- Filtros por temperatura, luminosidad, magnitud absoluta aproximada, radio, masa, distancia, planetas, B−V y tipo espectral.
-- Capas científicas opcionales: incertidumbre, radios constantes, isocronas y trayectorias evolutivas.
-- Ficha de estrella con pestaña Fuentes ampliada: Wikipedia, SIMBAD, VizieR, NASA Exoplanet Archive, Gaia Archive cuando hay identificador, NASA ADS, arXiv y Google.
-- Arranque por defecto en modo oscuro.
-- Arranque vacío: la página muestra fondo, degradado espectral continuo, cuadrícula, cuatro ejes y controles; no carga estrellas ni catálogos hasta que el usuario lo pide.
-- Esquema de cuatro ejes: luminosidad izquierda, magnitud absoluta derecha, tipo espectral arriba y color B−V abajo.
-- Degradado espectral suavizado para evitar cortes verticales duros entre bandas de color.
-- Zonas evolutivas redibujadas con contornos curvos, halo difuminado y relleno gradual.
-- Nombres de zonas estabilizados durante el zoom mediante una capa de pantalla fija.
-- Hit-test geométrico propio para que la interacción con zonas coincida con la forma visible.
-- Ficha moderna para estrellas y zonas evolutivas, con pestañas planas y contenido paginado.
-- Barra flotante superior con búsqueda, información, modo claro/oscuro, datos, filtros, capas y zoom.
-- Panel de información con título simplificado: **Diagrama de Hertzsprung-Russell**.
-- Guía científica ampliada a 20 capítulos, con tablas y enlaces externos de apoyo.
-- Diseño responsive para tablet y móvil mediante `mobile-responsive.css` y ajuste específico `beta-toolbar-fixes.css`.
-- Favicon SVG propio del proyecto.
-- Zoom máximo ampliado al 7000% mediante `zoom-boost.js`.
-- Panel de datos con importación local CSV y carga manual de catálogos estáticos troceados.
-- Catálogos visibles filtrables por fuente cargada.
-- Pantalla de carga con detalle textual y barra de progreso para catálogos pesados.
-- Importación avanzada con Web Worker para catálogos grandes.
+- Canvas adaptado automáticamente al tamaño real del navegador.
+- Soporte para escritorio, monitores 1080p/4K, pantallas ultrapanorámicas, tabletas y móviles verticales u horizontales.
+- Zoom de hasta **7000 %**.
+- Arrastre de la vista con ratón o un dedo.
+- Pellizco con dos dedos para hacer zoom en pantallas táctiles.
+- Reajuste automático tras cambios de orientación o tamaño del `visualViewport`.
 
-## Estructura principal
+### Cuatro ejes dinámicos
+
+El visor representa simultáneamente:
+
+- **Izquierda:** luminosidad relativa al Sol, `L☉`.
+- **Derecha:** magnitud absoluta aproximada.
+- **Arriba:** tipo espectral y referencias de temperatura efectiva.
+- **Abajo:** índice de color `B−V`.
+
+Las marcas de los ejes se recalculan según el rango visible. Al aumentar el zoom aparecen divisiones adicionales, incluidos valores B−V con dos decimales cuando la escala lo requiere.
+
+### Temas visuales
+
+La interfaz ofrece cuatro modos:
+
+- **Automático** — modo inicial recomendado.
+- **Día**.
+- **Tarde**.
+- **Noche**.
+
+El modo automático intenta obtener la ubicación mediante la API de geolocalización del navegador y calcula la altura solar local para decidir entre día, tarde y noche. Si la ubicación no está disponible, utiliza la hora local del dispositivo como respaldo.
+
+### Barra HUD unificada
+
+La interfaz superior utiliza un bloque rectangular compacto, sin botones flotantes redondeados. Incluye:
+
+1. Búsqueda.
+2. Enciclopedia.
+3. Tema.
+4. Datos.
+5. Filtros.
+6. Capas.
+7. Acerca del proyecto.
+8. Zoom actual / restablecer vista.
+
+En móvil, el buscador se despliega debajo de la barra y puede cerrarse pulsando nuevamente la lupa.
+
+---
+
+## Datos y catálogos
+
+La aplicación no carga estrellas automáticamente al abrirse. El escenario inicial queda vacío hasta que el usuario importa o solicita datos.
+
+### Importación CSV
+
+La importación se procesa localmente en el navegador. Los archivos no se envían a ningún servidor.
+
+Se reconocen, entre otros, formatos y campos habituales de:
+
+- NASA Exoplanet Archive.
+- HYG.
+- ATHYG / HYG-like.
+- Catálogos Gaia-like.
+- CSV HR genéricos.
+- Datasets de clasificación estelar con temperatura, luminosidad, radio, masa, color y clase espectral.
+
+Campos principales reconocidos incluyen variantes de:
 
 ```text
-.
-├── index.html
-├── styles.css
-├── catalog-layers.css
-├── floating-toolbar.css
-├── loading-progress.css
-├── data-panel-refine.css
-├── star-card-refine.css
-├── info-guide.css
-├── visibility-fixes.css
-├── mobile-responsive.css
-├── beta-toolbar-fixes.css
-├── webgl-renderer.css
-├── advanced-filters.css
-├── scientific-overlays.css
-├── favicon.svg
-├── app.js
-├── zoom-boost.js
-├── hr-four-axis-overlay.js
-├── evolutionary-regions-polish.js
-├── region-label-stabilizer.js
-├── scientific-overlays.js
-├── webgl-star-renderer.js
-├── advanced-filters.js
-├── external-sources-enhanced.js
-├── startup-empty-mode.js
-├── data-importer.js
-├── catalog-loader.js
-├── catalog-loader-enhanced.js
-├── static-catalog-loader.js
-├── label-rendering.js
-├── catalog-layer-filter.js
-├── floating-toolbar.js
-├── empty-data-hint.js
-├── star-card-refine.js
-├── region-card-refine.js
-├── data-actions.js
-├── info-guide.js
-├── info-guide-expansion.js
-├── mobile-info-index.js
-├── tools/
-│   └── split-catalogs.py
-├── data/
-│   ├── catalogs/
-│   │   ├── README.md
-│   │   ├── manifest.json
-│   │   └── ...
-│   └── stars.sample.json
-└── README.md
+teff
+st_teff
+temperature
+luminosity
+lum
+st_lum
+radius
+st_rad
+mass
+st_mass
+spect
+ci
+sy_dist
+sy_pnum
 ```
 
-## Motor WebGL experimental
+Los campos originales no vacíos de una fila importada se conservan en `rawFields` y pueden consultarse desde la ficha de estrella.
 
-`webgl-star-renderer.js` crea un segundo canvas transparente sobre el escenario principal y usa WebGL para dibujar los puntos estelares.
+### Catálogos estáticos troceados
 
-Características:
+Los catálogos grandes pueden dividirse en partes para mantenerlos dentro del repositorio y servirlos desde GitHub Pages.
 
-- Usa la GPU para dibujar todos los puntos con `gl.POINTS`.
-- Mantiene Canvas 2D para ejes, regiones, textos, fichas y compatibilidad.
-- Reconstruye el buffer de vértices cuando cambia `state.stars`.
-- Usa `scissor` para recortar el render al área interna del diagrama.
-- Mantiene una sobrecapa Canvas 2D para resaltar la estrella seleccionada o bajo el cursor.
-- Si WebGL no está disponible o falla la compilación de shaders, el sistema vuelve al renderizado Canvas original.
+Herramienta incluida:
 
-Limitación actual: el renderizado de puntos se acelera, pero la búsqueda de estrella cercana con el ratón sigue usando el método CPU original. Una mejora posterior será añadir índice espacial o quadtree.
+```bash
+python tools/split-catalogs.py "C:/ruta/a/mis_csv" --out data/catalogs --max-mib 22 --clean
+```
+
+El proceso genera:
+
+```text
+data/catalogs/manifest.json
+```
+
+y las distintas partes CSV. Si el manifest existe, la aplicación habilita la carga manual del repositorio propio.
+
+---
 
 ## Filtros científicos
 
-`advanced-filters.js` añade un panel de filtros accesible desde el botón de embudo.
+El botón de filtros permite acotar el conjunto visible sin modificar los datos originales.
 
 Filtros disponibles:
 
+- Tipo espectral.
 - Temperatura efectiva.
 - Luminosidad.
 - Magnitud absoluta aproximada.
@@ -121,94 +132,101 @@ Filtros disponibles:
 - Masa.
 - Distancia.
 - Número de planetas conocidos.
-- Color B−V.
-- Tipo espectral.
+- Índice B−V.
 
-Los filtros numéricos usan barras de doble extremo para acotar mínimo y máximo. El filtrado se integra con los filtros por catálogo: primero se respeta la fuente visible y después se acota el conjunto por criterios físicos.
+Los filtros numéricos incluyen:
+
+- barra de doble extremo;
+- mínimo y máximo independientes;
+- entrada manual de valores;
+- caché de estadísticas para catálogos grandes;
+- actualización diferida durante el arrastre para reducir bloqueos;
+- restauración real del catálogo completo cuando el rango vuelve a sus límites originales.
+
+---
 
 ## Capas científicas
 
-`scientific-overlays.js` añade cuatro capas opcionales al panel Capas:
+Desde el panel **Capas** se pueden activar o desactivar:
 
-- **Incertidumbre**: dibuja elipses cuando el catálogo aporta errores de temperatura o luminosidad; si falta uno de los ejes, usa una estimación visual suave.
-- **Radios constantes**: curvas de radio estelar aproximado basadas en la relación entre luminosidad, temperatura y radio.
-- **Isocronas**: curvas pedagógicas de edad aproximada, útiles para explicar cúmulos y población estelar.
-- **Trayectorias evolutivas**: recorridos esquemáticos para estrellas de distinta masa inicial.
+- Estrellas cargadas.
+- Zonas evolutivas.
+- Nombres de zonas.
+- Cuadrícula y ejes.
+- Animación suave.
+- Incertidumbre.
+- Radios constantes.
+- Isocronas.
+- Trayectorias evolutivas.
 
-Estas capas son ayudas visuales; no sustituyen modelos astrofísicos formales ni tablas de evolución profesional.
+### Incertidumbre
 
-## Fuentes externas ampliadas
+Cuando un catálogo aporta errores de temperatura o luminosidad, la aplicación puede representar una elipse de incertidumbre alrededor de la posición HR.
 
-`external-sources-enhanced.js` amplía la pestaña **Fuentes** de la ficha de estrella.
+### Radios constantes
 
-Incluye accesos a:
+Se muestran curvas aproximadas de radio estelar derivadas de la relación entre luminosidad, temperatura efectiva y radio.
+
+### Isocronas y trayectorias
+
+Las isocronas y trayectorias incluidas son **referencias pedagógicas**, útiles para contextualizar la evolución estelar. No sustituyen tablas profesionales como MIST, PARSEC, BaSTI o Geneva.
+
+---
+
+## Zonas evolutivas
+
+Las principales regiones del diagrama se muestran mediante polígonos suavizados y translúcidos:
+
+- Secuencia principal.
+- Gigantes.
+- Supergigantes.
+- Enanas blancas.
+- Franja de inestabilidad.
+
+La interacción utiliza hit-test geométrico sobre las formas suavizadas. Los nombres de las regiones se renderizan en una capa estabilizada para que mantengan un tamaño legible durante el zoom.
+
+---
+
+## Fichas de estrella
+
+Al seleccionar una estrella se abre una ficha moderna con pestañas y datos disponibles del catálogo.
+
+Puede mostrar, según la fuente:
+
+- Identidad y designaciones.
+- Temperatura.
+- Luminosidad.
+- Radio.
+- Masa.
+- Distancia.
+- Tipo espectral.
+- Datos CSV originales.
+- Fuente del registro.
+
+### Fuentes externas
+
+La pestaña **Fuentes** puede construir accesos a:
 
 - Wikipedia.
 - SIMBAD.
 - VizieR.
 - NASA Exoplanet Archive.
-- Gaia Archive cuando se detecta identificador Gaia.
+- Gaia Archive cuando existe identificador Gaia.
 - NASA ADS.
 - arXiv.
 - Google.
 
-Los enlaces usan el mejor identificador disponible: `hostname`, nombre de estrella, designación, HD, HIP, Gaia DR3 o clave del catálogo.
+El sistema intenta utilizar el identificador más útil disponible: nombre, `hostname`, HD, HIP, Gaia DR3 o clave propia del catálogo.
 
-## Interfaz
+---
 
-La interfaz principal usa una barra flotante situada en la esquina superior derecha en escritorio y adaptada a la parte superior en pantallas pequeñas.
+## Enciclopedia integrada
 
-- **Lupa**: despliega el campo de búsqueda.
-- **Información**: abre la guía del diagrama de Hertzsprung-Russell.
-- **Luna/Sol**: alterna entre modo oscuro y claro.
-- **Datos**: abre el panel de importación CSV, carga de catálogos y filtros por fuente.
-- **Filtros**: abre el panel de filtros científicos avanzados.
-- **Capas**: permite activar estrellas cargadas, zonas evolutivas, nombres de zonas, cuadrícula/ejes, animación y capas científicas.
-- **Zoom**: muestra el porcentaje actual y permite restablecer la vista.
-
-## Diseño móvil y tablet
-
-`mobile-responsive.css` añade una capa específica para pantallas pequeñas:
-
-- Toolbar compacta con botones táctiles.
-- Popovers adaptados al ancho disponible y a `safe-area-inset`.
-- Panel de datos con botones apilados en móvil estrecho.
-- Panel de capas con filas táctiles más altas.
-- Fichas de estrella y zona ajustadas a la altura disponible.
-- Panel de información en formato de lectura móvil.
-- Índice de la guía oculto tras botón **Temas**, gestionado por `mobile-info-index.js`.
-- Desplazamiento táctil con barras ocultas donde corresponde.
-
-## Ejes del diagrama
-
-La capa `hr-four-axis-overlay.js` sustituye el renderizado base de ejes y reserva margen específico para mostrar cuatro escalas simultáneas:
-
-- **Izquierda**: luminosidad relativa al Sol, L☉.
-- **Derecha**: magnitud absoluta aproximada, calculada desde luminosidad mediante una conversión bolométrica de referencia solar.
-- **Arriba**: tipo espectral O, B, A, F, G, K, M, con marcas de temperatura de referencia.
-- **Abajo**: color B−V estimado a partir de temperatura efectiva.
-
-La navegación, el zoom, la cuadrícula y la selección de estrellas siguen usando las mismas coordenadas internas de temperatura y luminosidad.
-
-## Zonas evolutivas
-
-`evolutionary-regions-polish.js` reemplaza el dibujo angular original por zonas pedagógicas suaves:
-
-- Contornos cerrados con curvas cuadráticas.
-- Relleno translúcido y halo difuminado.
-- Línea exterior redondeada.
-- Franja de inestabilidad con trazo discontinuo.
-- Selección y hover basados en geometría suavizada.
-
-`region-label-stabilizer.js` dibuja los nombres de zonas en una capa de pantalla fija para evitar que crezcan o salten durante el zoom.
-
-## Guía informativa
-
-El botón de información abre una ventana enciclopédica con 20 capítulos:
+El icono de libro abierto da acceso a una guía científica interna de **20 capítulos**:
 
 1. Qué estás viendo.
-2. Historia del diagrama.
-3. Ejes y escala.
+2. Historia del diagrama HR.
+3. Ejes y escalas.
 4. Temperatura y color.
 5. Tipos OBAFGKM.
 6. Luminosidad.
@@ -218,48 +236,148 @@ El botón de información abre una ventana enciclopédica con 20 capítulos:
 10. Vida estelar.
 11. Regiones HR.
 12. Variables e inestabilidad.
-13. Leer una estrella.
+13. Cómo leer una estrella.
 14. Catálogos y límites.
-15. Radio estelar y ley de Stefan-Boltzmann.
+15. Radio y ley de Stefan–Boltzmann.
 16. Metalicidad.
-17. Estrellas binarias, mezclas y dispersión.
-18. Cúmulos estelares e isocronas.
-19. Exoplanetas, estrellas anfitrionas y habitabilidad.
-20. Gaia, paralaje y buenas prácticas de exploración.
+17. Binarias, mezclas y dispersión.
+18. Cúmulos e isocronas.
+19. Exoplanetas y estrellas anfitrionas.
+20. Gaia, paralaje y buenas prácticas.
 
-La guía usa navegación por secciones, contenido desplazable con rueda o gesto táctil, scrollbar oculto y enlaces externos de apoyo.
+En móvil, el índice se repliega detrás del botón **Temas** para priorizar el espacio de lectura.
 
-## Importación de catálogos
-
-La aplicación acepta uno o varios CSV locales desde el panel de datos. El fichero no se sube a ningún servidor: se procesa en el navegador.
-
-El cargador avanzado reconoce actualmente:
-
-- **NASA Exoplanet Archive**: `hostname`, `st_teff`, `st_lum`, `st_rad`, `st_mass`, `sy_dist`, `sy_pnum`, `pl_name`.
-- **HYG / ATHYG / HYG-like**: `proper`, `spect`, `ci`, `lum`, `absmag`, `dist`, `hip`, `hd`, `gl`.
-- **CSV de clasificación estelar tipo Kaggle**: `Temperature (K)`, `Luminosity(L/Lo)`, `Radius(R/Ro)`, `Star type`, `Star color`, `Spectral Class`.
-- **CSV HR genéricos / Gaia-like**: `teff`, `temperature`, `temperature_k`, `effective_temperature`, `teff_gspphot`, `luminosity`, `lum`, `lum_flame`, `radius`, `st_rad`, `mass`, `st_mass`, `sy_dist`.
-
-`catalog-loader-enhanced.js` conserva los campos no vacíos de la fila CSV representada en `rawFields`. La ficha de estrella los muestra dentro de la pestaña **CSV**.
-
-## Catálogos estáticos troceados
-
-GitHub permite subir archivos de hasta 25 MiB desde la interfaz web, así que los CSV grandes deben dividirse si se quieren mantener dentro del repositorio y servirlos con GitHub Pages.
-
-Flujo recomendado:
-
-```bash
-python tools/split-catalogs.py "C:/ruta/a/mis_csv" --out data/catalogs --max-mib 22 --clean
-```
-
-El script genera `data/catalogs/manifest.json` y partes CSV por catálogo. Cuando el manifest existe en GitHub Pages, la web muestra el botón **Cargar repositorio propio** dentro del panel de datos. La descarga es manual para evitar bloqueos de arranque.
+---
 
 ## Rendimiento
 
-Para catálogos grandes, la importación se ejecuta en un **Web Worker**. Cuando se importan miles de estrellas, la app desactiva automáticamente la nube sintética. Si el catálogo supera decenas de miles de estrellas, también desactiva la animación para evitar redibujos continuos.
+La versión 1.0 combina varias estrategias:
 
-En la rama `beta`, los puntos estelares se dibujan mediante WebGL. Esta mejora reduce el coste de dibujo de catálogos grandes, pero todavía no sustituye la lógica de búsqueda/hover CPU. El siguiente paso técnico para grandes catálogos es añadir selección inteligente o índice espacial.
+- `Web Worker` para procesar importaciones grandes.
+- Renderizado Canvas 2D para ejes, regiones, textos y elementos científicos.
+- Capa WebGL experimental para dibujar grandes cantidades de puntos mediante `gl.POINTS`.
+- Redibujado táctil agrupado mediante `requestAnimationFrame`.
+- Desactivación automática de animación cuando el volumen de datos es elevado.
+- Caché de filtros y estadísticas.
 
-## Advertencia
+WebGL acelera principalmente el dibujo de puntos. La búsqueda de la estrella más cercana continúa siendo una operación CPU; un índice espacial o quadtree es una posible evolución posterior a la 1.0.
 
-La pantalla inicial no representa un catálogo científico; es un escenario HR vacío preparado para cargar datos. Las zonas evolutivas, isocronas y trayectorias son orientativas y no constituyen fronteras observacionales exactas. Los catálogos importados localmente pueden tener columnas incompletas, magnitudes derivadas o valores estimados. Las estimaciones desde B−V o clase espectral son útiles para visualización, pero no sustituyen una reducción científica controlada.
+---
+
+## Diseño responsive y táctil
+
+La aplicación utiliza el viewport visual real en lugar de depender de una resolución fija.
+
+Incluye:
+
+- `visualViewport` para navegadores móviles.
+- `ResizeObserver`.
+- soporte para cambios de orientación;
+- `safe-area-inset`;
+- canvas 2D y WebGL sincronizados;
+- desplazamiento con un dedo;
+- pinch-to-zoom con dos dedos;
+- toque simple para seleccionar objetos;
+- supresión de clic accidental tras arrastre o pellizco.
+
+---
+
+## Estructura del proyecto
+
+```text
+.
+├── index.html
+├── favicon.svg
+├── README.md
+│
+├── app.js
+├── startup-empty-mode.js
+├── theme-system.js
+├── floating-toolbar.js
+├── responsive-canvas-gestures.js
+├── zoom-boost.js
+│
+├── hr-four-axis-overlay.js
+├── hr-axis-v1-polish.js
+├── evolutionary-regions-polish.js
+├── region-label-stabilizer.js
+├── scientific-overlays.js
+├── label-rendering.js
+│
+├── webgl-star-renderer.js
+├── data-importer.js
+├── catalog-loader.js
+├── catalog-loader-enhanced.js
+├── static-catalog-loader.js
+├── catalog-layer-filter.js
+├── advanced-filters.js
+│
+├── star-card-refine.js
+├── region-card-refine.js
+├── external-sources-enhanced.js
+├── about-panel.js
+├── info-guide.js
+├── info-guide-expansion.js
+├── mobile-info-index.js
+├── data-actions.js
+├── empty-data-hint.js
+│
+├── styles.css
+├── atlas-square-ui.css
+├── responsive-viewport.css
+├── mobile-responsive.css
+├── floating-toolbar.css
+├── webgl-renderer.css
+├── advanced-filters.css
+├── scientific-overlays.css
+├── star-card-refine.css
+├── data-panel-refine.css
+├── info-guide.css
+├── loading-progress.css
+├── catalog-layers.css
+├── visibility-fixes.css
+├── beta-toolbar-fixes.css
+├── square-edges-final.css
+│
+├── data/
+│   └── catalogs/
+│       ├── manifest.json
+│       └── ...
+│
+└── tools/
+    └── split-catalogs.py
+```
+
+---
+
+## Límites científicos
+
+Diagrama Estelar es un visualizador científico-divulgativo, no una herramienta de reducción astrofísica profesional.
+
+Debe tenerse en cuenta que:
+
+- las regiones evolutivas son aproximadas;
+- las isocronas y trayectorias actuales son pedagógicas;
+- la magnitud absoluta mostrada puede derivarse de luminosidad mediante una aproximación;
+- B−V puede estimarse cuando el catálogo no lo proporciona directamente;
+- los catálogos pueden contener campos ausentes, estimados o duplicados;
+- los errores de los datos originales dependen de cada fuente.
+
+Para trabajo científico formal se deben consultar los catálogos y modelos originales.
+
+---
+
+## Autor
+
+**Alejandro Pico**
+
+- Portfolio: <https://alejandropico.github.io/Portfolio/>
+- Repositorio: <https://github.com/AlejandroPico/DiagramaEstelar>
+
+---
+
+## Versión
+
+**Diagrama Estelar 1.0 — 2026**
+
+La versión 1.0 establece la base funcional y visual del proyecto. Las futuras incorporaciones se considerarán evoluciones posteriores a esta primera versión estable.
