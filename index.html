@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="scientific-overlays.css" />
   <link rel="stylesheet" href="beta-toolbar-fixes.css" />
   <link rel="stylesheet" href="atlas-square-ui.css" />
+  <link rel="stylesheet" href="responsive-viewport.css" />
 </head>
 <body class="theme-day" data-theme-mode="auto" data-theme-resolved="day">
   <main id="app" aria-label="Visor interactivo del diagrama de Hertzsprung-Russell">
@@ -36,7 +37,7 @@
       </div>
 
       <button id="infoPanelButton" class="toolbar-button" type="button" data-popover-target="infoPopover" aria-label="Abrir Enciclopedia" aria-expanded="false" title="Enciclopedia">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"></path></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V5a2 2 0 0 1 2-2h5a3 3 0 0 1 3 3v15a3 3 0 0 0-3-3Z"></path><path d="M21 18a1 1 0 0 0 1-1V5a2 2 0 0 0-2-2h-5a3 3 0 0 0-3 3v15a3 3 0 0 1 3-3Z"></path></svg>
       </button>
 
       <button id="themeButton" class="toolbar-button" type="button" aria-label="Cambiar tema" title="Tema automático"></button>
@@ -157,6 +158,7 @@
   <script src="webgl-star-renderer.js" defer></script>
   <script src="zoom-boost.js" defer></script>
   <script src="hr-four-axis-overlay.js" defer></script>
+  <script src="responsive-canvas-gestures.js" defer></script>
   <script src="evolutionary-regions-polish.js" defer></script>
   <script src="region-label-stabilizer.js" defer></script>
   <script src="scientific-overlays.js" defer></script>
