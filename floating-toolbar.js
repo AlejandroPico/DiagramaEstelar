@@ -44,9 +44,10 @@
       }
 
       searchWrap.classList.add('open');
+      toolbar.classList.add('search-open');
       searchButton.classList.add('active');
       searchButton.setAttribute('aria-expanded', 'true');
-      window.setTimeout(() => searchInput.focus({ preventScroll: true }), 20);
+      window.setTimeout(() => searchInput.focus({ preventScroll: true }), 170);
     };
 
     searchInput.addEventListener('keydown', event => {
@@ -113,6 +114,7 @@
   function closeSearch() {
     if (!searchWrap || !searchButton) return;
     searchWrap.classList.remove('open');
+    toolbar.classList.remove('search-open');
     searchButton.classList.remove('active');
     searchButton.setAttribute('aria-expanded', 'false');
   }
