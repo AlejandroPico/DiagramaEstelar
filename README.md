@@ -30,7 +30,7 @@ El visor representa simultáneamente:
 - **Arriba:** tipo espectral y referencias de temperatura efectiva.
 - **Abajo:** índice de color `B−V`.
 
-Las marcas de los ejes se recalculan según el rango visible. Al aumentar el zoom aparecen divisiones adicionales, incluidos valores B−V con dos decimales cuando la escala lo requiere.
+Las marcas de los ejes se recalculan según el rango visible. Al aumentar el zoom aparecen divisiones adicionales. El eje B−V incrementa progresivamente su precisión y puede mostrar hasta cuatro decimales cuando el nivel de ampliación lo justifica, manteniendo separación mínima entre etiquetas para evitar solapamientos.
 
 ### Temas visuales
 
@@ -56,7 +56,7 @@ La interfaz superior utiliza un bloque rectangular compacto, sin botones flotant
 7. Acerca del proyecto.
 8. Zoom actual / restablecer vista.
 
-En móvil, el buscador se despliega debajo de la barra y puede cerrarse pulsando nuevamente la lupa.
+En móvil y tablet, el HUD se centra y ocupa solamente el ancho necesario para sus controles. El buscador crea una segunda fila dentro del propio HUD y puede cerrarse pulsando nuevamente la lupa. El gráfico reserva automáticamente margen superior para que las referencias del eje espectral no queden ocultas tras la barra.
 
 ---
 
@@ -278,7 +278,9 @@ Incluye:
 - desplazamiento con un dedo;
 - pinch-to-zoom con dos dedos;
 - toque simple para seleccionar objetos;
-- supresión de clic accidental tras arrastre o pellizco.
+- supresión de clic accidental tras arrastre o pellizco;
+- HUD móvil centrado y de anchura intrínseca;
+- margen superior del gráfico calculado respecto a la altura real del HUD.
 
 ---
 
@@ -295,10 +297,12 @@ Incluye:
 ├── theme-system.js
 ├── floating-toolbar.js
 ├── responsive-canvas-gestures.js
+├── mobile-chart-layout-v1.js
 ├── zoom-boost.js
 │
 ├── hr-four-axis-overlay.js
 ├── hr-axis-v1-polish.js
+├── bv-axis-detail-v1.js
 ├── evolutionary-regions-polish.js
 ├── region-label-stabilizer.js
 ├── scientific-overlays.js
