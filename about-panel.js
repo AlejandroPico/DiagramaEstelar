@@ -30,14 +30,14 @@
         <section class="about-project-statement">
           <span>PROPÓSITO</span>
           <h3>Leer la evolución estelar como un mapa físico</h3>
-          <p>Diagrama Estelar convierte el diagrama de Hertzsprung-Russell en un espacio interactivo donde temperatura, luminosidad, magnitud, color y clasificación espectral pueden explorarse junto a catálogos reales de estrellas. La herramienta está pensada para combinar lectura divulgativa, inspección visual y experimentación con grandes conjuntos de datos.</p>
-          <p>Las zonas evolutivas, isocronas y trayectorias pedagógicas sirven como referencias visuales. Los valores originales de cada catálogo permanecen accesibles para distinguir datos publicados, transformaciones y estimaciones.</p>
+          <p>Diagrama Estelar convierte el diagrama de Hertzsprung-Russell en un espacio interactivo donde temperatura, luminosidad, magnitud, color y clasificación espectral pueden explorarse junto a catálogos reales de estrellas. La herramienta combina lectura divulgativa, inspección visual y experimentación con grandes conjuntos de datos.</p>
+          <p>La versión 1.0 consolida el visor responsive, los cuatro ejes dinámicos, la navegación táctil, los filtros científicos, las capas evolutivas y el renderizado optimizado para catálogos masivos. Las zonas, isocronas y trayectorias pedagógicas se presentan como referencias visuales y no como fronteras observacionales exactas.</p>
         </section>
 
         <div class="about-project-principles">
-          <article><span class="about-symbol">HR</span><span><b>Lectura científica</b><small>Cuatro ejes, regiones evolutivas, filtros y capas para interpretar la posición de cada estrella.</small></span></article>
-          <article><span class="about-symbol">Σ</span><span><b>Catálogos masivos</b><small>Importación de CSV y fuentes troceadas con renderizado optimizado para decenas de miles de puntos.</small></span></article>
-          <article><span class="about-symbol">i</span><span><b>Trazabilidad</b><small>Ficha detallada, campos CSV originales, enlaces externos y enciclopedia científica integrada.</small></span></article>
+          <article><span class="about-symbol">HR</span><span><b>Lectura científica</b><small>Cuatro ejes dinámicos, regiones evolutivas, filtros y capas para interpretar la posición de cada estrella.</small></span></article>
+          <article><span class="about-symbol">Σ</span><span><b>Catálogos masivos</b><small>Importación CSV, catálogos troceados, Web Worker y renderizado WebGL experimental para grandes volúmenes.</small></span></article>
+          <article><span class="about-symbol">i</span><span><b>Trazabilidad</b><small>Ficha detallada, campos CSV originales, enlaces científicos externos y enciclopedia integrada.</small></span></article>
         </div>
       </div>
 
@@ -52,13 +52,13 @@
           </a>
           <a href="https://github.com/AlejandroPico/DiagramaEstelar" target="_blank" rel="noopener noreferrer">
             <span class="about-link-icon">⌘</span>
-            <span><b>Repositorio del proyecto</b><small>Código fuente, historial, rama beta y documentación en GitHub.</small></span>
+            <span><b>Repositorio del proyecto</b><small>Código fuente, historial y documentación del proyecto en GitHub.</small></span>
             <span aria-hidden="true">→</span>
           </a>
         </div>
       </section>
 
-      <footer><span>Versión beta</span><span>Diagrama Estelar · 2026</span></footer>
+      <footer><span>Versión 1.0</span><span>Diagrama Estelar · 2026</span></footer>
     </section>`;
 
   document.body.appendChild(host);
