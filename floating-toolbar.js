@@ -33,21 +33,32 @@
     searchButton.onclick = event => {
       event.stopPropagation();
       closePopovers();
-      if (!searchWrap.classList.contains('open')) {
-        searchWrap.classList.add('open');
-        searchButton.classList.add('active');
-        searchButton.setAttribute('aria-expanded', 'true');
-        searchInput.focus();
+
+      if (searchWrap.classList.contains('open')) {
+        if (searchInput.value.trim()) {
+          if (typeof originalSearch === 'function') originalSearch.call(searchButton, event);
+          else if (typeof runSearch === 'function') runSearch();
+        }
+        closeSearch();
         return;
       }
-      if (searchInput.value.trim()) {
-        if (typeof originalSearch === 'function') originalSearch.call(searchButton, event);
-        else if (typeof runSearch === 'function') runSearch();
-      }
+
+      searchWrap.classList.add('open');
+      searchButton.classList.add('active');
+      searchButton.setAttribute('aria-expanded', 'true');
+      window.setTimeout(() => searchInput.focus({ preventScroll: true }), 20);
     };
 
     searchInput.addEventListener('keydown', event => {
-      if (event.key === 'Escape') closeSearch();
+      if (event.key === 'Escape') {
+        closeSearch();
+        searchButton.focus();
+      }
+      if (event.key === 'Enter' && searchInput.value.trim()) {
+        event.preventDefault();
+        if (typeof originalSearch === 'function') originalSearch.call(searchButton, event);
+        else if (typeof runSearch === 'function') runSearch();
+      }
     });
   }
 
