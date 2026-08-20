@@ -87,12 +87,13 @@
 
     const finishTouch = event => {
       if (event.pointerType !== 'touch' || !activeTouches.has(event.pointerId)) return;
-      event.preventDefault();
+
+      const wasLastTouch = activeTouches.size === 1;
+      const wasTap = wasLastTouch && !gestureMoved;
+      if (!wasTap) event.preventDefault();
       event.stopPropagation();
       activeTouches.delete(event.pointerId);
       try { viewport.releasePointerCapture(event.pointerId); } catch (_) {}
-
-      if (gestureMoved) suppressClickUntil = performance.now() + 350;
 
       if (activeTouches.size >= 2) beginPinch();
       else if (activeTouches.size === 1) beginPan();
@@ -102,6 +103,9 @@
         state.dragging = false;
         state.dragStart = null;
         viewport.classList.remove('dragging');
+
+        suppressClickUntil = performance.now() + 350;
+        if (wasTap && typeof clickCanvas === 'function') clickCanvas(event);
         window.setTimeout(() => { gestureMoved = false; }, 0);
       }
     };
