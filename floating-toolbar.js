@@ -53,11 +53,16 @@
 
   if (themeButton) {
     renderThemeIcon();
-    themeButton.onclick = () => {
-      document.body.classList.toggle('dark');
+    themeButton.onclick = event => {
+      event.stopPropagation();
+      closePopovers();
+      closeSearch();
+      if (window.__HR_THEME__) window.__HR_THEME__.cycle();
+      else document.body.classList.toggle('dark');
       renderThemeIcon();
-      draw();
+      if (typeof draw === 'function') draw();
     };
+    window.addEventListener('hr-theme-change', renderThemeIcon);
   }
 
   if (zoomChip) {
@@ -81,6 +86,11 @@
     }
   });
 
+  window.addEventListener('hr-close-toolbar', () => {
+    closePopovers();
+    closeSearch();
+  });
+
   function closePopovers() {
     popovers.forEach(popover => popover.classList.remove('open'));
     popoverButtons.forEach(button => {
@@ -98,11 +108,32 @@
 
   function renderThemeIcon() {
     if (!themeButton) return;
-    const dark = document.body.classList.contains('dark');
-    themeButton.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-    themeButton.title = dark ? 'Modo claro' : 'Modo oscuro';
-    themeButton.innerHTML = dark
-      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"></path></svg>'
-      : '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>';
+    const api = window.__HR_THEME__;
+    const mode = api?.mode || (document.body.classList.contains('dark') ? 'night' : 'day');
+    const resolved = api?.resolved || mode;
+    const label = {
+      auto: `Automático · ${themeName(resolved)}`,
+      day: 'Día',
+      afternoon: 'Tarde',
+      night: 'Noche'
+    }[mode] || 'Tema';
+
+    themeButton.setAttribute('aria-label', `Cambiar tema. Actual: ${label}`);
+    themeButton.title = `Tema: ${label}`;
+    themeButton.classList.toggle('active', mode === 'auto');
+
+    if (mode === 'auto') {
+      themeButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3"></circle><path d="M8 2v2M8 12v2M2 8h2M12 8h2M3.8 3.8l1.4 1.4M10.8 10.8l1.4 1.4"></path><path d="M21 15.2A6.5 6.5 0 0 1 12.8 7 6.7 6.7 0 1 0 21 15.2Z"></path></svg>';
+    } else if (mode === 'day') {
+      themeButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>';
+    } else if (mode === 'afternoon') {
+      themeButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18"></path><path d="M6 15a6 6 0 0 1 12 0"></path><path d="M12 4v3M4.9 8.1 7 10.2M19.1 8.1 17 10.2"></path></svg>';
+    } else {
+      themeButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"></path></svg>';
+    }
+  }
+
+  function themeName(value) {
+    return value === 'afternoon' ? 'tarde' : value === 'night' ? 'noche' : 'día';
   }
 })();
