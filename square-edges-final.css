@@ -1,0 +1,40 @@
+/* Cierre de estilo: ninguna superficie interactiva usa esquinas redondeadas. */
+button,
+input,
+textarea,
+select,
+details,
+.toolbar-popover,
+.toolbar-popover *,
+.info-card,
+.info-card *,
+.side-panel,
+.cursor-hud,
+.data-action,
+.data-status,
+.filter-card,
+.filter-pill,
+.filter-reset,
+.filter-check,
+.filter-range-inputs input,
+.dual-range-track,
+.dual-range-fill,
+.info-guide,
+.info-guide *,
+.about-project-modal,
+.about-project-modal *,
+.empty-data-hint,
+.loading-progress-track,
+.loading-progress-bar {
+  border-radius: 0 !important;
+}
+
+.switch-row input,
+.switch-row input::after,
+.dual-range input[type="range"]::-webkit-slider-thumb {
+  border-radius: 0 !important;
+}
+
+.dual-range input[type="range"]::-moz-range-thumb {
+  border-radius: 0 !important;
+}
